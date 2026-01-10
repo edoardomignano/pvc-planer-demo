@@ -1,1 +1,588 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PVC-Welt – Planer Demo (Pool/Bewässerung)</title>
+  <style>
+    :root { --bg:#0b0f14; --panel:#121a23; --text:#e8eef6; --muted:#9fb0c3; --line:#3a4b5f; }
+    * { box-sizing: border-box; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+    body { margin:0; background:var(--bg); color:var(--text); }
+    header { padding:14px 16px; border-bottom:1px solid #1f2a36; display:flex; gap:10px; align-items:center; }
+    header b { letter-spacing:.2px; }
+    .wrap { display:grid; grid-template-columns: 320px 1fr; gap:12px; padding:12px; }
+    .panel { background:var(--panel); border:1px solid #1f2a36; border-radius:14px; overflow:hidden; }
+    .panel h3 { margin:0; padding:12px 12px 10px; border-bottom:1px solid #1f2a36; font-size:14px; color:var(--muted); }
+    .panel .content { padding:12px; }
+    .btnrow { display:flex; flex-wrap:wrap; gap:8px; }
+    button {
+      background:#192434; border:1px solid #2a3a50; color:var(--text);
+      padding:8px 10px; border-radius:10px; cursor:pointer; font-size:13px;
+    }
+    button.active { outline:2px solid #5aa7ff; }
+    button:hover { filter:brightness(1.07); }
+    .hint { color:var(--muted); font-size:12px; line-height:1.35; margin:10px 0 0; }
+    .kv { display:grid; grid-template-columns: 1fr auto; gap:6px 10px; font-size:13px; }
+    .kv div { padding:4px 0; border-bottom:1px dashed #243245; }
+    .kv div:nth-last-child(-n+2) { border-bottom:0; }
+    .small { color:var(--muted); font-size:12px; margin-top:10px; }
+    canvas { width:100%; height: calc(100vh - 76px); display:block; background:linear-gradient(#0b0f14, #0b0f14); }
+    .footer { padding:10px 12px; border-top:1px solid #1f2a36; color:var(--muted); font-size:12px; }
+    input[type="number"]{
+      width:100%; padding:8px 10px; border-radius:10px; border:1px solid #2a3a50;
+      background:#0f1722; color:var(--text);
+    }
+    label { font-size:12px; color:var(--muted); display:block; margin-bottom:6px; }
+    .split { display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
+    .pill { display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; border:1px solid #2a3a50; background:#0f1722; color:var(--muted); font-size:12px; }
+  </style>
+</head>
+<body>
+<header>
+  <b>PVC-Welt Planer – Demo</b>
+  <span class="pill">Pool / Bewässerung • Drag-&-Click Demo</span>
+</header>
+
+<div class="wrap">
+  <div class="panel">
+    <h3>Werkzeuge</h3>
+    <div class="content">
+      <div class="btnrow">
+        <button id="toolPool">Pool platzieren</button>
+        <button id="toolSource">Wasserquelle setzen</button>
+        <button id="toolPipe" class="active">Leitung zeichnen</button>
+        <button id="toolBlock">Sperrzone zeichnen</button>
+        <button id="toolMove">Objekte verschieben</button>
+      </div>
+
+      <div style="height:12px"></div>
+      <div class="split">
+        <div>
+          <label>Skalierung (Meter pro Rasterfeld)</label>
+          <input id="scale" type="number" min="0.1" step="0.1" value="0.5">
+        </div>
+        <div>
+          <label>Rohr-Ø (nur Demo)</label>
+          <input id="diam" type="number" min="16" step="1" value="50">
+        </div>
+      </div>
+
+      <p class="hint">
+        <b>Leitung:</b> Klicke Punkte, <b>Doppelklick</b> beendet. <br/>
+        <b>Sperrzone:</b> Klicken & ziehen (Rechteck). <br/>
+        <b>Verschieben:</b> Objekt anklicken & ziehen.
+      </p>
+
+      <div style="height:10px"></div>
+      <div class="btnrow">
+        <button id="btnAutoRoute">Auto-Route (simple)</button>
+        <button id="btnClear">Alles löschen</button>
+      </div>
+
+      <div style="height:14px"></div>
+      <h3 style="margin:0; padding:12px 0 8px; border:0; color:var(--muted);">Stückliste (auto)</h3>
+      <div class="kv" id="bom"></div>
+      <div class="small" id="warnings"></div>
+    </div>
+    <div class="footer">
+      Hinweis: Das ist eine Demo. Logik/Regeln kann man später auf echte Artikelnummern/Kompatibilitäten erweitern.
+    </div>
+  </div>
+
+  <div class="panel">
+    <canvas id="c"></canvas>
+  </div>
+</div>
+
+<script>
+(() => {
+  const canvas = document.getElementById('c');
+  const ctx = canvas.getContext('2d');
+
+  // Resize for HiDPI
+  function resize() {
+    const dpr = Math.max(1, window.devicePixelRatio || 1);
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = Math.floor(rect.width * dpr);
+    canvas.height = Math.floor(rect.height * dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    draw();
+  }
+  window.addEventListener('resize', resize);
+
+  // Tools
+  const tools = {
+    PIPE: 'pipe',
+    POOL: 'pool',
+    SOURCE: 'source',
+    BLOCK: 'block',
+    MOVE: 'move',
+  };
+  let tool = tools.PIPE;
+
+  const buttons = {
+    toolPipe: document.getElementById('toolPipe'),
+    toolPool: document.getElementById('toolPool'),
+    toolSource: document.getElementById('toolSource'),
+    toolBlock: document.getElementById('toolBlock'),
+    toolMove: document.getElementById('toolMove'),
+  };
+
+  function setTool(t) {
+    tool = t;
+    Object.values(buttons).forEach(b => b.classList.remove('active'));
+    const map = {
+      [tools.PIPE]: buttons.toolPipe,
+      [tools.POOL]: buttons.toolPool,
+      [tools.SOURCE]: buttons.toolSource,
+      [tools.BLOCK]: buttons.toolBlock,
+      [tools.MOVE]: buttons.toolMove,
+    };
+    map[t].classList.add('active');
+    draw();
+  }
+
+  buttons.toolPipe.onclick = () => setTool(tools.PIPE);
+  buttons.toolPool.onclick = () => setTool(tools.POOL);
+  buttons.toolSource.onclick = () => setTool(tools.SOURCE);
+  buttons.toolBlock.onclick = () => setTool(tools.BLOCK);
+  buttons.toolMove.onclick = () => setTool(tools.MOVE);
+
+  // Scene data
+  const state = {
+    grid: 32, // px
+    pool: null,        // {x,y,w,h}
+    source: null,      // {x,y}
+    blocks: [],        // {x,y,w,h}
+    pipes: [],         // array of polylines: [{pts:[{x,y},...]}]
+    drawingPipe: null, // current polyline
+    drawingBlock: null,// {x0,y0,x1,y1}
+    dragging: null,    // {type, ref, ox, oy}
+  };
+
+  const scaleInput = document.getElementById('scale');
+  const diamInput = document.getElementById('diam');
+  const bomEl = document.getElementById('bom');
+  const warnEl = document.getElementById('warnings');
+
+  function snap(v) {
+    const g = state.grid;
+    return Math.round(v / g) * g;
+  }
+
+  function toRect(x0,y0,x1,y1){
+    const x = Math.min(x0,x1), y = Math.min(y0,y1);
+    return { x, y, w: Math.abs(x1-x0), h: Math.abs(y1-y0) };
+  }
+
+  function insideRect(p, r){
+    return p.x >= r.x && p.x <= r.x + r.w && p.y >= r.y && p.y <= r.y + r.h;
+  }
+
+  function hitTestObjects(p){
+    if (state.pool && insideRect(p, state.pool)) return {type:'pool', ref:state.pool};
+    for (const b of state.blocks){
+      if (insideRect(p, b)) return {type:'block', ref:b};
+    }
+    if (state.source){
+      const dx = p.x - state.source.x, dy = p.y - state.source.y;
+      if (Math.hypot(dx,dy) < 10) return {type:'source', ref:state.source};
+    }
+    return null;
+  }
+
+  // Mouse handling
+  let lastClickTime = 0;
+
+  function getPos(e){
+    const rect = canvas.getBoundingClientRect();
+    return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+  }
+
+  canvas.addEventListener('mousedown', (e) => {
+    const p = getPos(e);
+    const sp = {x:snap(p.x), y:snap(p.y)};
+
+    if (tool === tools.MOVE){
+      const hit = hitTestObjects(p);
+      if (hit){
+        state.dragging = { type: hit.type, ref: hit.ref, ox: p.x - hit.ref.x, oy: p.y - hit.ref.y };
+      }
+      return;
+    }
+
+    if (tool === tools.POOL){
+      state.pool = { x: sp.x, y: sp.y, w: state.grid*6, h: state.grid*4 };
+      draw();
+      return;
+    }
+
+    if (tool === tools.SOURCE){
+      state.source = { x: sp.x, y: sp.y };
+      draw();
+      return;
+    }
+
+    if (tool === tools.BLOCK){
+      state.drawingBlock = { x0: sp.x, y0: sp.y, x1: sp.x, y1: sp.y };
+      draw();
+      return;
+    }
+
+    if (tool === tools.PIPE){
+      // Start or add point
+      const now = performance.now();
+      const isDouble = (now - lastClickTime) < 320;
+      lastClickTime = now;
+
+      if (!state.drawingPipe){
+        state.drawingPipe = { pts: [sp] };
+      } else {
+        const pts = state.drawingPipe.pts;
+        // Avoid duplicate point
+        const last = pts[pts.length - 1];
+        if (last.x !== sp.x || last.y !== sp.y) pts.push(sp);
+      }
+
+      if (isDouble && state.drawingPipe.pts.length >= 2){
+        state.pipes.push(state.drawingPipe);
+        state.drawingPipe = null;
+      }
+      draw();
+      return;
+    }
+  });
+
+  canvas.addEventListener('mousemove', (e) => {
+    const p = getPos(e);
+    const sp = {x:snap(p.x), y:snap(p.y)};
+
+    if (state.dragging){
+      const r = state.dragging.ref;
+      r.x = snap(p.x - state.dragging.ox);
+      r.y = snap(p.y - state.dragging.oy);
+      draw();
+      return;
+    }
+
+    if (tool === tools.BLOCK && state.drawingBlock){
+      state.drawingBlock.x1 = sp.x;
+      state.drawingBlock.y1 = sp.y;
+      draw();
+      return;
+    }
+
+    // Preview for pipe
+    if (tool === tools.PIPE && state.drawingPipe){
+      state.drawingPipe.preview = sp;
+      draw();
+    }
+  });
+
+  canvas.addEventListener('mouseup', () => {
+    if (state.dragging) state.dragging = null;
+
+    if (tool === tools.BLOCK && state.drawingBlock){
+      const r = toRect(state.drawingBlock.x0, state.drawingBlock.y0, state.drawingBlock.x1, state.drawingBlock.y1);
+      // Ignore tiny rectangles
+      if (r.w >= state.grid && r.h >= state.grid) state.blocks.push(r);
+      state.drawingBlock = null;
+      draw();
+    }
+  });
+
+  canvas.addEventListener('mouseleave', () => {
+    if (state.dragging) state.dragging = null;
+  });
+
+  // Buttons
+  document.getElementById('btnClear').onclick = () => {
+    state.pool = null; state.source = null; state.blocks = []; state.pipes = [];
+    state.drawingPipe = null; state.drawingBlock = null;
+    draw();
+  };
+
+  document.getElementById('btnAutoRoute').onclick = () => {
+    if (!state.source || !state.pool){
+      alert('Bitte zuerst Wasserquelle setzen und Pool platzieren.');
+      return;
+    }
+    // Simple L-Route around nearest block (demo-level)
+    const sx = state.source.x, sy = state.source.y;
+    const tx = state.pool.x + state.pool.w/2, ty = state.pool.y + state.pool.h/2;
+
+    const mid1 = {x: snap(tx), y: snap(sy)};
+    const mid2 = {x: snap(sx), y: snap(ty)};
+    // Choose the mid point with fewer intersections
+    function intersectsBlock(a,b){
+      // sample points along segment
+      const steps = 20;
+      for (let i=0;i<=steps;i++){
+        const t=i/steps;
+        const x=a.x+(b.x-a.x)*t, y=a.y+(b.y-a.y)*t;
+        for (const bl of state.blocks){
+          if (x>=bl.x && x<=bl.x+bl.w && y>=bl.y && y<=bl.y+bl.h) return true;
+        }
+      }
+      return false;
+    }
+    const routeA = [ {x:sx,y:sy}, mid1, {x:snap(tx), y:snap(ty)} ];
+    const routeB = [ {x:sx,y:sy}, mid2, {x:snap(tx), y:snap(ty)} ];
+
+    const badA = intersectsBlock(routeA[0], routeA[1]) || intersectsBlock(routeA[1], routeA[2]);
+    const badB = intersectsBlock(routeB[0], routeB[1]) || intersectsBlock(routeB[1], routeB[2]);
+
+    const pts = (!badA && badB) ? routeA : (!badB && badA) ? routeB : routeA; // fallback
+    state.pipes.push({pts});
+    draw();
+  };
+
+  // BOM
+  function calcBOM(){
+    const g = state.grid;
+    const metersPerCell = Math.max(0.1, Number(scaleInput.value) || 0.5);
+    const diam = Math.round(Number(diamInput.value) || 50);
+
+    let totalPx = 0;
+    let elbows = 0;
+    let segments = 0;
+    let connectors = 0;
+    let warnings = [];
+
+    function addPolyline(pl){
+      const pts = pl.pts;
+      for (let i=0;i<pts.length-1;i++){
+        const a=pts[i], b=pts[i+1];
+        totalPx += Math.hypot(b.x-a.x, b.y-a.y);
+        segments++;
+      }
+      if (pts.length >= 3){
+        elbows += (pts.length - 2);
+      }
+      // connectors: start + end + intermediate joins (rough demo)
+      if (pts.length >= 2){
+        connectors += 2; // ends
+        connectors += Math.max(0, pts.length - 2); // joins
+      }
+
+      // Basic warning if pipe crosses blocks
+      for (let i=0;i<pts.length-1;i++){
+        const a=pts[i], b=pts[i+1];
+        const steps = 20;
+        for (let s=0;s<=steps;s++){
+          const t=s/steps;
+          const x=a.x+(b.x-a.x)*t, y=a.y+(b.y-a.y)*t;
+          for (const bl of state.blocks){
+            if (x>=bl.x && x<=bl.x+bl.w && y>=bl.y && y<=bl.y+bl.h){
+              warnings.push('Leitung schneidet eine Sperrzone. Bitte Route anpassen.');
+              s=steps+1; i=pts.length; break;
+            }
+          }
+        }
+      }
+    }
+
+    state.pipes.forEach(addPolyline);
+    if (state.drawingPipe && state.drawingPipe.pts?.length>=2) addPolyline(state.drawingPipe);
+
+    const totalCells = totalPx / g;
+    const totalMeters = totalCells * metersPerCell;
+
+    // Suggested commercial lengths (demo): 1m sticks
+    const stickLen = 1; // m
+    const sticks = Math.ceil(totalMeters / stickLen);
+    const waste = Math.max(0, sticks*stickLen - totalMeters);
+
+    // Basic sanity checks
+    if (!state.source) warnings.push('Keine Wasserquelle gesetzt.');
+    if (!state.pool) warnings.push('Kein Pool/Objekt gesetzt (für Bewässerung kann das auch eine Zone sein).');
+    if (totalMeters === 0) warnings.push('Noch keine Leitung gezeichnet.');
+
+    return {
+      diam, totalMeters, sticks, waste, elbows, connectors, segments,
+      warnings: [...new Set(warnings)]
+    };
+  }
+
+  function renderBOM(){
+    const b = calcBOM();
+    bomEl.innerHTML = `
+      <div>Rohr-Ø (Demo)</div><div>${b.diam} mm</div>
+      <div>Leitungslänge</div><div>${b.totalMeters.toFixed(1)} m</div>
+      <div>Rohre (1 m Stangen)</div><div>${b.sticks} Stk</div>
+      <div>Verschnitt (Schätzung)</div><div>${b.waste.toFixed(1)} m</div>
+      <div>Winkel 90° (Ecken)</div><div>${b.elbows} Stk</div>
+      <div>Verbinder/Muffen</div><div>${b.connectors} Stk</div>
+      <div>Segmente</div><div>${b.segments} </div>
+    `;
+    warnEl.textContent = b.warnings.length ? ("Hinweise: " + b.warnings.join(" · ")) : "";
+  }
+
+  // Drawing
+  function drawGrid(){
+    const rect = canvas.getBoundingClientRect();
+    const w = rect.width, h = rect.height;
+    const g = state.grid;
+    ctx.save();
+    ctx.globalAlpha = 0.18;
+    ctx.strokeStyle = '#2b3a4d';
+    ctx.lineWidth = 1;
+
+    for (let x=0; x<w; x+=g){
+      ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,h); ctx.stroke();
+    }
+    for (let y=0; y<h; y+=g){
+      ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function drawPool(){
+    if (!state.pool) return;
+    const r = state.pool;
+    ctx.save();
+    ctx.fillStyle = '#143a60';
+    ctx.strokeStyle = '#5aa7ff';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.roundRect(r.x, r.y, r.w, r.h, 12);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = '#e8eef6';
+    ctx.font = '12px system-ui';
+    ctx.fillText('POOL / ZIEL', r.x + 10, r.y + 18);
+    ctx.restore();
+  }
+
+  function drawSource(){
+    if (!state.source) return;
+    const s = state.source;
+    ctx.save();
+    ctx.fillStyle = '#1f8cff';
+    ctx.strokeStyle = '#cbe4ff';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, 7, 0, Math.PI*2);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = '#e8eef6';
+    ctx.font = '12px system-ui';
+    ctx.fillText('WASSER', s.x + 10, s.y + 4);
+    ctx.restore();
+  }
+
+  function drawBlocks(){
+    ctx.save();
+    ctx.fillStyle = 'rgba(255,80,80,0.18)';
+    ctx.strokeStyle = 'rgba(255,120,120,0.8)';
+    ctx.lineWidth = 2;
+    for (const b of state.blocks){
+      ctx.beginPath();
+      ctx.roundRect(b.x, b.y, b.w, b.h, 10);
+      ctx.fill(); ctx.stroke();
+      ctx.fillStyle = 'rgba(255,170,170,0.9)';
+      ctx.font = '12px system-ui';
+      ctx.fillText('SPERRZONE', b.x + 10, b.y + 18);
+      ctx.fillStyle = 'rgba(255,80,80,0.18)';
+    }
+    // preview block
+    if (state.drawingBlock){
+      const r = toRect(state.drawingBlock.x0, state.drawingBlock.y0, state.drawingBlock.x1, state.drawingBlock.y1);
+      ctx.beginPath(); ctx.roundRect(r.x, r.y, r.w, r.h, 10); ctx.fill(); ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function drawPipes(){
+    ctx.save();
+    ctx.strokeStyle = '#7ee787';
+    ctx.lineWidth = 4;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+
+    function drawPolyline(pl, preview=false){
+      const pts = pl.pts || [];
+      if (pts.length < 1) return;
+      ctx.beginPath();
+      ctx.moveTo(pts[0].x, pts[0].y);
+      for (let i=1;i<pts.length;i++) ctx.lineTo(pts[i].x, pts[i].y);
+      if (preview && pl.preview) ctx.lineTo(pl.preview.x, pl.preview.y);
+      ctx.stroke();
+
+      // draw nodes
+      ctx.fillStyle = '#c9f7cf';
+      for (const p of pts){
+        ctx.beginPath(); ctx.arc(p.x, p.y, 4, 0, Math.PI*2); ctx.fill();
+      }
+      if (preview && pl.preview){
+        ctx.fillStyle = '#dfffe3';
+        ctx.beginPath(); ctx.arc(pl.preview.x, pl.preview.y, 4, 0, Math.PI*2); ctx.fill();
+      }
+    }
+
+    state.pipes.forEach(pl => drawPolyline(pl, false));
+    if (state.drawingPipe) drawPolyline(state.drawingPipe, true);
+
+    ctx.restore();
+  }
+
+  function drawHUD(){
+    // tool label
+    const label = ({
+      [tools.PIPE]:'Leitung zeichnen',
+      [tools.POOL]:'Pool platzieren',
+      [tools.SOURCE]:'Wasserquelle setzen',
+      [tools.BLOCK]:'Sperrzone zeichnen',
+      [tools.MOVE]:'Objekte verschieben',
+    })[tool];
+
+    ctx.save();
+    ctx.fillStyle = 'rgba(0,0,0,0.35)';
+    ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.roundRect(12, 12, 180, 34, 12);
+    ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#e8eef6';
+    ctx.font = '12px system-ui';
+    ctx.fillText('Tool: ' + label, 22, 33);
+    ctx.restore();
+  }
+
+  function draw(){
+    const rect = canvas.getBoundingClientRect();
+    ctx.clearRect(0,0,rect.width,rect.height);
+    drawGrid();
+    drawBlocks();
+    drawPool();
+    drawSource();
+    drawPipes();
+    drawHUD();
+    renderBOM();
+  }
+
+  // keep BOM in sync
+  scaleInput.addEventListener('input', draw);
+  diamInput.addEventListener('input', draw);
+
+  // Start
+  // polyfill for roundRect if needed
+  if (!CanvasRenderingContext2D.prototype.roundRect) {
+    CanvasRenderingContext2D.prototype.roundRect = function(x,y,w,h,r){
+      r = Math.min(r, w/2, h/2);
+      this.moveTo(x+r, y);
+      this.arcTo(x+w, y, x+w, y+h, r);
+      this.arcTo(x+w, y+h, x, y+h, r);
+      this.arcTo(x, y+h, x, y, r);
+      this.arcTo(x, y, x+w, y, r);
+      this.closePath();
+      return this;
+    };
+  }
+
+  resize();
+})();
+</script>
+</body>
+</html>
 
