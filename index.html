@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>PVC-Welt Planer – Demo</title>
+  <title>PVC WELT Planer Demo – Version 2</title>
   <style>
     :root{
       --bg:#0b0f14; --panel:#121a23; --panel2:#0f1722; --line:#1f2a36;
@@ -48,7 +48,7 @@
     .canvasWrap{position:relative}
     canvas{width:100%;height:calc(100vh - 88px);display:block;background:#0b0f14}
     .hud{
-      position:absolute;top:12px;left:12px;right:12px;max-width:860px;
+      position:absolute;top:12px;left:12px;right:12px;max-width:900px;
       background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.12);
       border-radius:12px;padding:10px 12px;font-size:12px;color:var(--text);backdrop-filter:blur(4px)
     }
@@ -65,11 +65,20 @@
     .toggleRow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}
     .chip{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;border:1px solid #2a3a50;background:var(--panel2);color:var(--muted);font-size:12px}
     .chip input{width:auto}
+
+    /* optional mini error bar */
+    .errbar{
+      position:absolute;top:10px;right:12px;max-width:420px;
+      background:rgba(255,91,91,.18);border:1px solid rgba(255,91,91,.35);
+      color:rgba(255,255,255,.92);padding:8px 10px;border-radius:12px;
+      font-size:12px;display:none
+    }
+    .errbar.show{display:block}
   </style>
 </head>
 <body>
 <header>
-  <b>PVC-Welt Planer – Demo</b>
+  <b>PVC WELT Planer Demo – Version 2</b>
   <span class="pill">Geradeziehen • Kalibrieren • Sperrzonen • Leitungen</span>
   <span class="pill">Zoom: <b>Ctrl + Mausrad</b></span>
 </header>
@@ -100,13 +109,11 @@
       <div class="step" id="step2">
         <div class="stepHeader">
           <div style="display:flex;align-items:center;gap:10px">
-            <span class="badge">2</span><div class="stepTitle">Bild gerade ziehen (funktioniert wieder)</div>
+            <span class="badge">2</span><div class="stepTitle">Bild gerade ziehen</div>
           </div>
           <span class="badge" id="s2">optional</span>
         </div>
-        <div class="stepDesc">
-          Klicke Punkt 1 + Punkt 2 entlang einer Kante, die waagerecht sein soll (z. B. Hauskante). Wiederholbar.
-        </div>
+        <div class="stepDesc">„Start“ drücken → Punkt 1 klicken → Punkt 2 klicken (Kante) → Bild dreht sich. Wiederholbar.</div>
         <div class="row">
           <button id="btnStraight" class="primary" disabled>Geradeziehen starten</button>
           <button id="btnStraightReset" disabled>Zurücksetzen</button>
@@ -116,11 +123,11 @@
       <div class="step" id="step3">
         <div class="stepHeader">
           <div style="display:flex;align-items:center;gap:10px">
-            <span class="badge">3</span><div class="stepTitle">Maßstab einstellen (funktioniert wieder)</div>
+            <span class="badge">3</span><div class="stepTitle">Maßstab einstellen</div>
           </div>
           <span class="badge" id="s3">offen</span>
         </div>
-        <div class="stepDesc">Klicke 2 Punkte mit bekannter Distanz, dann Meter eingeben.</div>
+        <div class="stepDesc">„Start“ drücken → 2 Punkte klicken → Meter eingeben.</div>
         <div class="row">
           <button id="btnCal" class="primary" disabled>Kalibrierung starten</button>
           <button id="btnCalReset" disabled>Zurücksetzen</button>
@@ -139,7 +146,7 @@
 
         <div class="split">
           <div>
-            <label>Raster-Größe (für fein/ grob)</label>
+            <label>Raster-Größe</label>
             <select id="gridSize">
               <option value="40">Groß (40px)</option>
               <option value="32" selected>Normal (32px)</option>
@@ -183,7 +190,7 @@
           </div>
           <span class="badge" id="s4">offen</span>
         </div>
-        <div class="stepDesc">Klick im Plan auf den Wasseranschluss.</div>
+        <div class="stepDesc">Button drücken → Klick im Plan.</div>
         <div class="row">
           <button id="btnSource" class="primary" disabled>Wasserquelle setzen</button>
         </div>
@@ -196,7 +203,7 @@
           </div>
           <span class="badge" id="s5">offen</span>
         </div>
-        <div class="stepDesc">Form/Größe wählen, dann im Plan platzieren. Verschieben: Button drücken, dann Pool ziehen.</div>
+        <div class="stepDesc">Pool setzen, dann optional „Pool verschieben“ drücken und ziehen.</div>
 
         <div class="split">
           <div>
@@ -232,13 +239,11 @@
       <div class="step" id="step6">
         <div class="stepHeader">
           <div style="display:flex;align-items:center;gap:10px">
-            <span class="badge">6</span><div class="stepTitle">Sperrzonen (flexibel ✅)</div>
+            <span class="badge">6</span><div class="stepTitle">Sperrzonen (flexibel)</div>
           </div>
           <span class="badge" id="s6">optional</span>
         </div>
-        <div class="stepDesc">
-          <b>Freihand:</b> Maus gedrückt halten und malen. <b>Polygon:</b> Punkte klicken, <span class="kbd">Enter</span> fertig.
-        </div>
+        <div class="stepDesc"><b>Freihand:</b> halten & malen. <b>Polygon:</b> Punkte klicken, <span class="kbd">Enter</span> fertig.</div>
         <div class="row">
           <button id="btnBlockFree" disabled class="primary">Sperrzone Freihand</button>
           <button id="btnBlockPoly" disabled>Sperrzone Polygon</button>
@@ -249,12 +254,12 @@
       <div class="step" id="step7">
         <div class="stepHeader">
           <div style="display:flex;align-items:center;gap:10px">
-            <span class="badge">7</span><div class="stepTitle">Leitung zeichnen (zusammenhängend)</div>
+            <span class="badge">7</span><div class="stepTitle">Leitung zeichnen</div>
           </div>
           <span class="badge" id="s7">offen</span>
         </div>
         <div class="stepDesc">
-          1. Klick startet • danach folgt die Linie der Maus • jeder Klick hängt am letzten Punkt • <b>Doppelklick = fertig</b> • <span class="kbd">Esc</span> abbrechen.
+          1. Klick startet • Linie folgt Maus • Klick setzt nächsten Punkt • <b>Doppelklick = fertig</b> • <span class="kbd">Esc</span> abbrechen.
         </div>
         <div class="row">
           <button id="btnPipe" class="primary" disabled>Leitung zeichnen</button>
@@ -286,7 +291,8 @@
   </div>
 
   <div class="panel canvasWrap">
-    <div class="hud" id="hud"><b>Schritt 1:</b> Bild hochladen.</div>
+    <div class="hud" id="hud"><b>PVC WELT Planer Demo – Version 2</b> • Schritt 1: Bild hochladen.</div>
+    <div class="errbar" id="errbar"></div>
     <div class="toast" id="toast">OK</div>
     <canvas id="c"></canvas>
   </div>
@@ -296,13 +302,23 @@
 
 <script>
 (() => {
+  const VERSION = 2;
+
   const canvas = document.getElementById('c');
   const ctx = canvas.getContext('2d');
 
-  // UI
   const hud = document.getElementById('hud');
   const toast = document.getElementById('toast');
+  const errbar = document.getElementById('errbar');
 
+  // --- global error catcher (zeigt, wenn Script irgendwo crasht)
+  window.addEventListener('error', (ev) => {
+    const msg = (ev && ev.message) ? ev.message : 'Unbekannter Fehler';
+    errbar.textContent = 'Fehler: ' + msg + ' (Bitte Screenshot schicken)';
+    errbar.classList.add('show');
+  });
+
+  // UI
   const bgFile = document.getElementById('bgFile');
   const btnFit = document.getElementById('btnFit');
   const btnMoveAll = document.getElementById('btnMoveAll');
@@ -367,11 +383,10 @@
     out: document.getElementById('out'),
   };
 
-  // tools
   const tools = {
     NONE:'none',
-    MOVE_ALL:'move_all',      // drag bg, water, pool
-    MOVE_POOL:'move_pool',    // drag pool only
+    MOVE_ALL:'move_all',
+    MOVE_POOL:'move_pool',
     STRAIGHT:'straight',
     CAL:'cal',
     SOURCE:'source',
@@ -395,29 +410,22 @@
   // state
   const state = {
     grid: 32,
-
     bg: { img:null, x:0, y:0, scale:1, rot:0 },
     bgDrag: null,
-
-    straighten: { active:false, p1:null, p2:null, preview:null },
-
+    straighten: { active:false, p1:null, preview:null },
     cal: { active:false, p1:null, p2:null, pxPerMeter:null },
-
     source: null,
     pool: null,
-
     blocks: [],
     drawingFree: null,
     drawingPoly: null,
-
     pipes: [],
     drawingPipe: null,
-
-    draggingObj: null, // {type:'source'|'pool'|'bg', ox, oy}
+    draggingObj: null,
     pointerInCanvas: false,
   };
 
-  // ===== UI helpers =====
+  // ====== helpers UI ======
   function setHud(html){ hud.innerHTML = html; }
   function showToast(text){
     toast.textContent = text;
@@ -444,7 +452,7 @@
     el.classList.toggle('done', !!done);
   }
 
-  // ===== geometry helpers =====
+  // ===== geometry =====
   function getPos(e){
     const r = canvas.getBoundingClientRect();
     return { x: e.clientX - r.left, y: e.clientY - r.top };
@@ -457,6 +465,22 @@
   }
   function snapPoint(p){ return { x: snapValue(p.x), y: snapValue(p.y) }; }
   function dist(a,b){ return Math.hypot(b.x-a.x, b.y-a.y); }
+
+  // ===== robust rounded rect (fix for browsers without ctx.roundRect) =====
+  function roundedRectPath(x,y,w,h,r){
+    const rr = Math.max(0, Math.min(r, Math.min(w,h)/2));
+    ctx.beginPath();
+    ctx.moveTo(x+rr, y);
+    ctx.lineTo(x+w-rr, y);
+    ctx.quadraticCurveTo(x+w, y, x+w, y+rr);
+    ctx.lineTo(x+w, y+h-rr);
+    ctx.quadraticCurveTo(x+w, y+h, x+w-rr, y+h);
+    ctx.lineTo(x+rr, y+h);
+    ctx.quadraticCurveTo(x, y+h, x, y+h-rr);
+    ctx.lineTo(x, y+rr);
+    ctx.quadraticCurveTo(x, y, x+rr, y);
+    ctx.closePath();
+  }
 
   // ===== rotation mapping =====
   function bgCenter(){
@@ -578,7 +602,7 @@
     return false;
   }
 
-  // ===== hit tests for dragging =====
+  // ===== hit tests =====
   function hitPool(p){
     if(!state.pool) return false;
     const pl = state.pool;
@@ -616,7 +640,6 @@
     };
 
     for(const p of state.pipes) addPolyline(p.pts);
-
     const totalM = pxToMeters(totalPx);
 
     if(!state.bg.img) warnings.push('Kein Hintergrundbild geladen.');
@@ -670,7 +693,7 @@
       y += 6;
     }
 
-    line('PVC-Welt – Bestellübersicht (Demo)', true);
+    line(`PVC WELT – Bestellübersicht (Demo) – Version ${VERSION}`, true);
     line('Projekt: Pool / Bewässerung Planung');
     hr();
 
@@ -770,22 +793,22 @@
     markDone('step7', state.pipes.length>0);
 
     if(!hasBg){
-      setHud('<b>Schritt 1:</b> Bild hochladen.');
+      setHud(`<b>PVC WELT Planer Demo – Version ${VERSION}</b> • Schritt 1: Bild hochladen.`);
       activateStep('step1');
     } else if(!state.cal.pxPerMeter){
-      setHud('<b>Schritt 2–3:</b> Optional geradeziehen, dann Maßstab kalibrieren.');
+      setHud(`<b>PVC WELT Planer Demo – Version ${VERSION}</b> • Schritt 2/3: Geradeziehen & Kalibrieren.`);
       activateStep('step3');
     } else if(!state.source){
-      setHud('<b>Schritt 4:</b> Wasserquelle setzen.');
+      setHud(`<b>PVC WELT Planer Demo – Version ${VERSION}</b> • Schritt 4: Wasserquelle setzen.`);
       activateStep('step4');
     } else if(!state.pool){
-      setHud('<b>Schritt 5:</b> Pool platzieren.');
+      setHud(`<b>PVC WELT Planer Demo – Version ${VERSION}</b> • Schritt 5: Pool platzieren.`);
       activateStep('step5');
     } else if(state.pipes.length===0){
-      setHud('<b>Schritt 7:</b> Leitung zeichnen (Doppelklick = fertig).');
+      setHud(`<b>PVC WELT Planer Demo – Version ${VERSION}</b> • Schritt 7: Leitung zeichnen (Doppelklick = fertig).`);
       activateStep('step7');
     } else {
-      setHud('<b>Fertig:</b> Stückliste prüfen oder PDF laden.');
+      setHud(`<b>PVC WELT Planer Demo – Version ${VERSION}</b> • Fertig: Stückliste / PDF.`);
       activateStep('out');
     }
 
@@ -795,13 +818,9 @@
 
   // ===== reset =====
   function resetPlanning(){
-    state.source=null;
-    state.pool=null;
-    state.blocks=[];
-    state.drawingFree=null;
-    state.drawingPoly=null;
-    state.pipes=[];
-    state.drawingPipe=null;
+    state.source=null; state.pool=null;
+    state.blocks=[]; state.drawingFree=null; state.drawingPoly=null;
+    state.pipes=[]; state.drawingPipe=null;
     state.draggingObj=null;
 
     state.cal={active:false,p1:null,p2:null,pxPerMeter:null};
@@ -811,118 +830,14 @@
   function resetAll(){
     state.bg={img:null,x:0,y:0,scale:1,rot:0};
     state.bgDrag=null;
-    state.straighten={active:false,p1:null,p2:null,preview:null};
+    state.straighten={active:false,p1:null,preview:null};
     resetPlanning();
     tool=tools.NONE;
     showToast('Alles zurückgesetzt');
     updateWizard();
   }
 
-  // ===== tool buttons =====
-  btnMoveAll.onclick = ()=>{
-    tool = (tool===tools.MOVE_ALL) ? tools.NONE : tools.MOVE_ALL;
-    showToast(tool===tools.MOVE_ALL ? 'Verschieben-Modus AN' : 'Verschieben-Modus AUS');
-    setHud(tool===tools.MOVE_ALL ? '<b>Verschieben:</b> Hintergrund/Wasser/Pool ziehen.' : '<b>Hinweis:</b> Wähle einen Schritt links.');
-  };
-
-  btnStraight.onclick = ()=>{
-    tool=tools.STRAIGHT;
-    state.straighten.active=true;
-    state.straighten.p1=null; state.straighten.p2=null; state.straighten.preview=null;
-    showToast('Geradeziehen: jetzt 2 Punkte klicken');
-    setHud('<b>Geradeziehen:</b> Punkt 1 klicken, dann Punkt 2 (Kante).');
-    updateWizard();
-  };
-  btnStraightReset.onclick = ()=>{
-    state.bg.rot=0;
-    showToast('Geradeziehen zurückgesetzt');
-    updateWizard();
-  };
-
-  btnCal.onclick = ()=>{
-    tool=tools.CAL;
-    state.cal.active=true;
-    state.cal.p1=null; state.cal.p2=null; state.cal.pxPerMeter=null;
-    calWarn.textContent='Klicke Punkt 1 im Plan.';
-    calOk.textContent='';
-    showToast('Kalibrierung: 2 Punkte klicken');
-    setHud('<b>Kalibrierung:</b> Punkt 1 klicken, dann Punkt 2 klicken.');
-    updateWizard();
-  };
-  btnCalReset.onclick = ()=>{
-    state.cal={active:false,p1:null,p2:null,pxPerMeter:null};
-    calMeters.value='';
-    calOk.textContent=''; calWarn.textContent='';
-    showToast('Kalibrierung zurückgesetzt');
-    updateWizard();
-  };
-
-  btnSource.onclick = ()=>{
-    tool=tools.SOURCE;
-    showToast('Wasserquelle: klicken');
-    setHud('<b>Wasserquelle:</b> Im Plan klicken.');
-  };
-
-  btnPool.onclick = ()=>{
-    tool=tools.POOL;
-    showToast('Pool: klicken');
-    setHud('<b>Pool:</b> Im Plan klicken.');
-  };
-
-  btnPoolMove.onclick = ()=>{
-    tool = tools.MOVE_POOL;
-    showToast('Pool verschieben: Pool ziehen');
-    setHud('<b>Pool verschieben:</b> Pool anklicken und ziehen (Esc beendet).');
-  };
-
-  btnBlockFree.onclick = ()=>{
-    tool=tools.BLOCK_FREE;
-    state.drawingFree=null;
-    showToast('Sperrzone Freihand: zeichnen');
-    setHud('<b>Sperrzone Freihand:</b> Maus gedrückt halten und malen.');
-  };
-  btnBlockPoly.onclick = ()=>{
-    tool=tools.BLOCK_POLY;
-    state.drawingPoly={pts:[], preview:null};
-    showToast('Sperrzone Polygon: Punkte');
-    setHud('<b>Sperrzone Polygon:</b> Punkte klicken • Enter fertig • Esc abbrechen.');
-  };
-  btnBlocksClear.onclick = ()=>{
-    state.blocks=[];
-    showToast('Sperrzonen gelöscht');
-    updateWizard();
-  };
-
-  btnPipe.onclick = ()=>{
-    tool=tools.PIPE;
-    state.drawingPipe = null;
-    showToast('Leitung: 1. Klick startet');
-    setHud('<b>Leitung:</b> Klick startet • Linie folgt Maus • Klick = nächster Punkt • Doppelklick = fertig.');
-    updateWizard();
-  };
-  btnPipeCancel.onclick = ()=>{
-    state.drawingPipe=null;
-    tool=tools.NONE;
-    showToast('Leitung abgebrochen');
-    updateWizard();
-  };
-
-  btnFit.onclick = ()=>{ fitBackground(); showToast('Bild eingepasst'); draw(); };
-  btnRemove.onclick = ()=>resetAll();
-
-  btnPlanClear.onclick = ()=>{
-    state.source=null;
-    state.pool=null;
-    state.blocks=[];
-    state.pipes=[];
-    state.drawingPipe=null;
-    tool=tools.NONE;
-    showToast('Plan gelöscht');
-    updateWizard();
-  };
-  btnResetAll.onclick = ()=>resetAll();
-
-  // ===== inputs =====
+  // ===== input hooks =====
   gridSize.addEventListener('change', ()=>{
     state.grid = Number(gridSize.value||32);
     showToast('Raster geändert');
@@ -943,7 +858,6 @@
       state.bg.img=img;
       state.bg.rot=0;
       fitBackground();
-      state.straighten={active:false,p1:null,p2:null,preview:null};
       resetPlanning();
       tool=tools.NONE;
       showToast('Bild geladen');
@@ -951,6 +865,67 @@
     };
     img.src=URL.createObjectURL(file);
   });
+
+  // ===== buttons =====
+  btnFit.onclick = ()=>{ fitBackground(); showToast('Bild eingepasst'); draw(); };
+  btnRemove.onclick = ()=>resetAll();
+
+  btnMoveAll.onclick = ()=>{
+    tool = (tool===tools.MOVE_ALL) ? tools.NONE : tools.MOVE_ALL;
+    showToast(tool===tools.MOVE_ALL ? 'Verschieben-Modus AN' : 'Verschieben-Modus AUS');
+  };
+
+  btnStraight.onclick = ()=>{
+    tool=tools.STRAIGHT;
+    state.straighten.active=true;
+    state.straighten.p1=null; state.straighten.preview=null;
+    showToast('Geradeziehen: 2 Punkte klicken');
+    setHud(`<b>Version ${VERSION}</b> • Geradeziehen: Punkt 1 klicken, dann Punkt 2.`);
+    updateWizard();
+  };
+  btnStraightReset.onclick = ()=>{
+    state.bg.rot=0;
+    showToast('Geradeziehen zurückgesetzt');
+    updateWizard();
+  };
+
+  btnCal.onclick = ()=>{
+    tool=tools.CAL;
+    state.cal.active=true;
+    state.cal.p1=null; state.cal.p2=null; state.cal.pxPerMeter=null;
+    calWarn.textContent='Klicke Punkt 1 im Plan.';
+    calOk.textContent='';
+    showToast('Kalibrierung: 2 Punkte klicken');
+    setHud(`<b>Version ${VERSION}</b> • Kalibrieren: Punkt 1 klicken, dann Punkt 2.`);
+    updateWizard();
+  };
+  btnCalReset.onclick = ()=>{
+    state.cal={active:false,p1:null,p2:null,pxPerMeter:null};
+    calMeters.value='';
+    calOk.textContent=''; calWarn.textContent='';
+    showToast('Kalibrierung zurückgesetzt');
+    updateWizard();
+  };
+
+  btnSource.onclick = ()=>{ tool=tools.SOURCE; showToast('Wasserquelle: klicken'); };
+  btnPool.onclick = ()=>{ tool=tools.POOL; showToast('Pool: klicken'); };
+
+  btnPoolMove.onclick = ()=>{ tool=tools.MOVE_POOL; showToast('Pool verschieben: ziehen'); };
+
+  btnBlockFree.onclick = ()=>{ tool=tools.BLOCK_FREE; state.drawingFree=null; showToast('Sperrzone Freihand'); };
+  btnBlockPoly.onclick  = ()=>{ tool=tools.BLOCK_POLY; state.drawingPoly={pts:[], preview:null}; showToast('Sperrzone Polygon'); };
+  btnBlocksClear.onclick= ()=>{ state.blocks=[]; showToast('Sperrzonen gelöscht'); updateWizard(); };
+
+  btnPipe.onclick = ()=>{ tool=tools.PIPE; state.drawingPipe=null; showToast('Leitung: 1. Klick startet'); updateWizard(); };
+  btnPipeCancel.onclick = ()=>{ state.drawingPipe=null; tool=tools.NONE; showToast('Leitung abgebrochen'); updateWizard(); };
+
+  btnPlanClear.onclick = ()=>{
+    state.source=null; state.pool=null; state.blocks=[]; state.pipes=[]; state.drawingPipe=null;
+    tool=tools.NONE;
+    showToast('Plan gelöscht');
+    updateWizard();
+  };
+  btnResetAll.onclick = ()=>resetAll();
 
   // ===== calibration meter input =====
   calMeters.addEventListener('input', ()=>{
@@ -968,7 +943,7 @@
     }
   });
 
-  // ===== Zoom only with Ctrl =====
+  // ===== zoom only with Ctrl =====
   canvas.addEventListener('wheel', (e)=>{
     if(!state.bg.img) return;
     if(!e.ctrlKey) return;
@@ -991,13 +966,13 @@
     draw();
   }, {passive:false});
 
-  // ===== Keyboard =====
+  // ===== keyboard =====
   document.addEventListener('keydown', (e)=>{
     if(e.key==='Escape'){
       if(tool===tools.MOVE_POOL){ tool=tools.NONE; showToast('Pool verschieben beendet'); updateWizard(); return; }
       if(state.drawingPipe){ state.drawingPipe=null; tool=tools.NONE; showToast('Leitung abgebrochen'); updateWizard(); return; }
       if(state.cal.active){ state.cal.active=false; state.cal.p1=null; state.cal.p2=null; tool=tools.NONE; showToast('Kalibrierung abgebrochen'); updateWizard(); return; }
-      if(state.straighten.active){ state.straighten.active=false; state.straighten.p1=null; state.straighten.p2=null; state.straighten.preview=null; tool=tools.NONE; showToast('Geradeziehen abgebrochen'); updateWizard(); return; }
+      if(state.straighten.active){ state.straighten.active=false; state.straighten.p1=null; state.straighten.preview=null; tool=tools.NONE; showToast('Geradeziehen abgebrochen'); updateWizard(); return; }
       if(state.drawingPoly){ state.drawingPoly=null; showToast('Polygon abgebrochen'); draw(); return; }
     }
     if(e.key==='Enter'){
@@ -1013,7 +988,7 @@
     }
   });
 
-  // ===== drawing helper =====
+  // ===== draw helper =====
   function drawInWorld(fn){
     const c=bgCenter();
     ctx.save();
@@ -1024,7 +999,7 @@
     ctx.restore();
   }
 
-  // ===== canvas pointer =====
+  // ===== mouse/pointer =====
   canvas.addEventListener('mouseenter', ()=>state.pointerInCanvas=true);
   canvas.addEventListener('mouseleave', ()=>{
     state.pointerInCanvas=false;
@@ -1042,9 +1017,8 @@
     const pwRaw=screenToWorld(ps);
     const pw=snapPoint(pwRaw);
 
-    // MOVE modes (drag bg, source, pool)
+    // MOVE modes
     if(tool===tools.MOVE_ALL || tool===tools.MOVE_POOL){
-      // try drag pool/source first
       if((tool===tools.MOVE_ALL || tool===tools.MOVE_POOL) && state.pool && hitPool(pwRaw)){
         state.draggingObj={type:'pool', ox: pwRaw.x - state.pool.x, oy: pwRaw.y - state.pool.y};
         return;
@@ -1059,29 +1033,29 @@
       }
     }
 
-    // STRAIGHTEN (2 clicks)
+    // STRAIGHTEN
     if(tool===tools.STRAIGHT && state.straighten.active){
       if(!state.straighten.p1){
         state.straighten.p1=pw;
         showToast('Geradeziehen: Punkt 1');
         draw();
         return;
-      }
-      if(!state.straighten.p2){
-        state.straighten.p2=pw;
-        const dx=state.straighten.p2.x-state.straighten.p1.x;
-        const dy=state.straighten.p2.y-state.straighten.p1.y;
+      } else {
+        const p2=pw;
+        const dx=p2.x-state.straighten.p1.x;
+        const dy=p2.y-state.straighten.p1.y;
         const angle=Math.atan2(dy,dx);
         state.bg.rot = state.bg.rot - angle;
         showToast('Bild ausgerichtet ✅');
-        // allow repeat: keep active but reset points
-        state.straighten.p1=null; state.straighten.p2=null; state.straighten.preview=null;
+        // repeatable
+        state.straighten.p1=null;
+        state.straighten.preview=null;
         updateWizard();
         return;
       }
     }
 
-    // CALIBRATION (2 clicks)
+    // CALIBRATION
     if(tool===tools.CAL && state.cal.active){
       if(!state.cal.p1){
         state.cal.p1=pw;
@@ -1138,7 +1112,7 @@
       return;
     }
 
-    // PIPE: start or add point (ALWAYS connected!)
+    // PIPE connected
     if(tool===tools.PIPE){
       if(!state.drawingPipe){
         state.drawingPipe={pts:[pw], preview:null};
@@ -1160,7 +1134,6 @@
     const pwRaw=screenToWorld(ps);
     const pw=snapPoint(pwRaw);
 
-    // dragging objects/bg
     if(state.draggingObj){
       if(state.draggingObj.type==='pool'){
         state.pool.x = snapValue(pwRaw.x - state.draggingObj.ox);
@@ -1182,7 +1155,6 @@
       return;
     }
 
-    // previews
     if(tool===tools.STRAIGHT && state.straighten.active && state.straighten.p1){
       state.straighten.preview=pw;
       draw();
@@ -1203,7 +1175,7 @@
       return;
     }
     if(tool===tools.PIPE && state.drawingPipe){
-      state.drawingPipe.preview=pw; // line follows mouse after first click ✅
+      state.drawingPipe.preview=pw;
       draw();
       return;
     }
@@ -1213,7 +1185,6 @@
     state.bgDrag=null;
     state.draggingObj=null;
 
-    // finish freehand block
     if(tool===tools.BLOCK_FREE && state.drawingFree){
       const pts=state.drawingFree.pts;
       if(pts.length>=10){
@@ -1231,8 +1202,7 @@
     }
   });
 
-  // Doppelklick = Leitung fertig ✅
-  canvas.addEventListener('dblclick', (e)=>{
+  canvas.addEventListener('dblclick', ()=>{
     if(tool!==tools.PIPE) return;
     if(!state.drawingPipe) return;
     if(state.drawingPipe.pts.length>=2){
@@ -1247,7 +1217,7 @@
     updateWizard();
   });
 
-  // ===== draw =====
+  // ===== drawing =====
   function drawGrid(){
     if(gridMode.value!=='grid') return;
     const rect=canvas.getBoundingClientRect();
@@ -1321,8 +1291,7 @@
       ctx.lineWidth=2;
 
       if(p.shape==='rect'){
-        ctx.beginPath();
-        ctx.roundRect(p.x, p.y, p.w, p.h, 12);
+        roundedRectPath(p.x, p.y, p.w, p.h, 12);
         ctx.fill(); ctx.stroke();
       } else {
         const cx=p.x+p.w/2, cy=p.y+p.h/2;
@@ -1370,36 +1339,24 @@
       ctx.lineCap='round';
       ctx.lineJoin='round';
 
-      const drawLine = (pl)=>{
-        const pts=pl.pts;
+      const drawLine = (pts, previewPoint)=>{
         if(!pts.length) return;
         ctx.beginPath();
         ctx.moveTo(pts[0].x, pts[0].y);
         for(let i=1;i<pts.length;i++) ctx.lineTo(pts[i].x, pts[i].y);
+        if(previewPoint) ctx.lineTo(previewPoint.x, previewPoint.y);
         ctx.stroke();
 
         ctx.fillStyle='#c9f7cf';
         for(const p of pts){ ctx.beginPath(); ctx.arc(p.x,p.y,4,0,Math.PI*2); ctx.fill(); }
       };
 
-      for(const p of state.pipes) drawLine(p);
+      for(const p of state.pipes) drawLine(p.pts, null);
 
-      // preview line (mouse-follow)
       if(state.drawingPipe){
-        const pts = state.drawingPipe.pts;
-        if(pts.length){
-          ctx.beginPath();
-          ctx.moveTo(pts[0].x, pts[0].y);
-          for(let i=1;i<pts.length;i++) ctx.lineTo(pts[i].x, pts[i].y);
-          if(state.drawingPipe.preview) ctx.lineTo(state.drawingPipe.preview.x, state.drawingPipe.preview.y);
-          ctx.stroke();
-
-          ctx.fillStyle='#c9f7cf';
-          for(const p of pts){ ctx.beginPath(); ctx.arc(p.x,p.y,4,0,Math.PI*2); ctx.fill(); }
-        }
+        drawLine(state.drawingPipe.pts, state.drawingPipe.preview);
       }
 
-      // segment labels
       if(showMeasures.checked){
         ctx.fillStyle='rgba(255,255,255,.9)';
         ctx.font='12px system-ui';
@@ -1415,7 +1372,7 @@
     });
   }
 
-  function drawStraightenPreview(){
+  function drawStraightPreview(){
     if(!(tool===tools.STRAIGHT && state.straighten.active && state.straighten.p1 && state.straighten.preview)) return;
     drawInWorld(()=>{
       ctx.strokeStyle='rgba(255,255,255,.85)';
@@ -1460,12 +1417,12 @@
     drawSource();
     drawPipes();
     drawCalLine();
-    drawStraightenPreview();
+    drawStraightPreview();
 
     renderBOM();
   }
 
-  // ===== init =====
+  // ===== initial enable =====
   function init(){
     updatePoolLabels();
     updatePoolLive();
@@ -1473,7 +1430,26 @@
     updateWizard();
   }
 
-  // ===== start =====
+  // enable / disable by bg presence
+  function enableCoreByBg(){
+    const hasBg = !!state.bg.img;
+    enable(btnFit, hasBg);
+    enable(btnMoveAll, hasBg);
+    enable(btnRemove, hasBg);
+    enable(btnStraight, hasBg);
+    enable(btnStraightReset, hasBg);
+    enable(btnCal, hasBg);
+    enable(btnCalReset, hasBg);
+    enable(btnSource, hasBg);
+  }
+
+  // hook wizard to core enabling
+  const _uw = updateWizard;
+  updateWizard = function(){
+    enableCoreByBg();
+    _uw();
+  };
+
   init();
 })();
 </script>
