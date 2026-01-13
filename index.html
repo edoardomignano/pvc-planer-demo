@@ -19,29 +19,18 @@
     .panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden}
     .panel h3{margin:0;padding:12px 12px 10px;border-bottom:1px solid var(--line);font-size:14px;color:var(--muted)}
     .content{padding:12px;max-height:calc(100vh - 104px);overflow:auto}
-    .step{
-      border:1px solid #223144;background:rgba(255,255,255,.02);
-      border-radius:14px;padding:12px;margin-bottom:10px;
-      transition:border-color .2s, box-shadow .2s;
-    }
+    .step{border:1px solid #223144;background:rgba(255,255,255,.02);border-radius:14px;padding:12px;margin-bottom:10px;transition:border-color .2s, box-shadow .2s;}
     .step.activeStep{border-color:rgba(90,167,255,.55);box-shadow:0 0 0 2px rgba(90,167,255,.10) inset}
     .step.done{border-color:rgba(126,231,135,.45);box-shadow:0 0 0 2px rgba(126,231,135,.10) inset}
     .stepHeader{display:flex;align-items:center;justify-content:space-between;gap:10px}
-    .badge{
-      display:inline-flex;align-items:center;justify-content:center;
-      min-width:24px;height:24px;padding:0 8px;border-radius:999px;
-      border:1px solid #2a3a50;background:var(--panel2);color:var(--muted);font-size:12px
-    }
+    .badge{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;padding:0 8px;border-radius:999px;border:1px solid #2a3a50;background:var(--panel2);color:var(--muted);font-size:12px}
     .badge.ok{border-color:rgba(126,231,135,.5);color:var(--ok)}
     .badge.warn{border-color:rgba(255,184,107,.5);color:var(--warn)}
     .badge.bad{border-color:rgba(255,91,91,.55);color:var(--bad)}
     .stepTitle{font-weight:800;font-size:13px}
     .stepDesc{color:var(--muted);font-size:12px;line-height:1.35;margin:8px 0 0}
     .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-    button{
-      background:#192434;border:1px solid #2a3a50;color:var(--text);
-      padding:8px 10px;border-radius:10px;cursor:pointer;font-size:13px
-    }
+    button{background:#192434;border:1px solid #2a3a50;color:var(--text);padding:8px 10px;border-radius:10px;cursor:pointer;font-size:13px}
     button.primary{border-color:rgba(90,167,255,.55);box-shadow:0 0 0 1px rgba(90,167,255,.15) inset}
     button:disabled{opacity:.45;cursor:not-allowed}
     button:hover{filter:brightness(1.06)}
@@ -51,8 +40,7 @@
     }
     .split{display:grid;grid-template-columns:1fr 1fr;gap:10px}
     .hint{color:var(--muted);font-size:12px;line-height:1.35;margin-top:8px}
-    .ok{color:var(--ok)}
-    .warn{color:var(--warn)}
+    .ok{color:var(--ok)} .warn{color:var(--warn)}
     .kv{display:grid;grid-template-columns:1fr auto;gap:6px 10px;font-size:13px}
     .kv div{padding:4px 0;border-bottom:1px dashed #243245}
     .kv div:nth-last-child(-n+2){border-bottom:0}
@@ -64,29 +52,25 @@
       background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.12);
       border-radius:12px;padding:10px 12px;font-size:12px;color:var(--text);backdrop-filter:blur(4px)
     }
-    .hud b{font-weight:800}
     .toast{
       position:absolute;bottom:14px;left:14px;
       background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.14);
       color:var(--text);padding:10px 12px;border-radius:12px;font-size:12px;
       opacity:0;transform:translateY(6px);transition:opacity .2s, transform .2s;
-      pointer-events:none;max-width:720px
+      pointer-events:none;max-width:740px
     }
     .toast.show{opacity:1;transform:translateY(0)}
     .footerRow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
     .kbd{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 6px;border-radius:6px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);font-size:11px;color:var(--text)}
     .toggleRow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}
-    .chip{
-      display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;
-      border:1px solid #2a3a50;background:var(--panel2);color:var(--muted);font-size:12px
-    }
+    .chip{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;border:1px solid #2a3a50;background:var(--panel2);color:var(--muted);font-size:12px}
     .chip input{width:auto}
   </style>
 </head>
 <body>
 <header>
   <b>PVC-Welt Planer – Demo</b>
-  <span class="pill">Geradeziehen • Kalibrieren • Sperrzonen • Auto-Route (um Hindernisse)</span>
+  <span class="pill">Geradeziehen • Kalibrieren • Sperrzonen • Leitungen</span>
   <span class="pill">Zoom: <b>Ctrl + Mausrad</b></span>
 </header>
 
@@ -98,8 +82,7 @@
       <div class="step" id="step1">
         <div class="stepHeader">
           <div style="display:flex;align-items:center;gap:10px">
-            <span class="badge">1</span>
-            <div class="stepTitle">Bild einfügen</div>
+            <span class="badge">1</span><div class="stepTitle">Bild einfügen</div>
           </div>
           <span class="badge" id="s1">offen</span>
         </div>
@@ -108,43 +91,41 @@
         <input id="bgFile" type="file" accept="image/*" />
         <div class="row">
           <button id="btnFit" class="primary" disabled>Bild einpassen</button>
-          <button id="btnMove" disabled>Verschieben</button>
+          <button id="btnMoveAll" disabled>Verschieben-Modus</button>
           <button id="btnRemove" disabled>Bild entfernen</button>
         </div>
-        <div class="hint">Damit du links normal scrollen kannst: Zoomen im Plan geht nur mit <b>Ctrl + Mausrad</b>.</div>
+        <div class="hint">Zoomen im Plan geht nur mit <b>Ctrl + Mausrad</b>, damit du links normal scrollen kannst.</div>
       </div>
 
       <div class="step" id="step2">
         <div class="stepHeader">
           <div style="display:flex;align-items:center;gap:10px">
-            <span class="badge">2</span>
-            <div class="stepTitle">Bild gerade ziehen (wiederholbar)</div>
+            <span class="badge">2</span><div class="stepTitle">Bild gerade ziehen (funktioniert wieder)</div>
           </div>
           <span class="badge" id="s2">optional</span>
         </div>
         <div class="stepDesc">
-          Ziehe eine Linie entlang einer Kante, die waagerecht sein soll (Hauskante / Zaun).
-          Du kannst das beliebig oft machen, bis es passt.
+          Klicke Punkt 1 + Punkt 2 entlang einer Kante, die waagerecht sein soll (z. B. Hauskante). Wiederholbar.
         </div>
         <div class="row">
-          <button id="btnStraight" class="primary" disabled>Gerade-Linie ziehen</button>
-          <button id="btnStraightReset" disabled>Geradeziehen zurücksetzen</button>
+          <button id="btnStraight" class="primary" disabled>Geradeziehen starten</button>
+          <button id="btnStraightReset" disabled>Zurücksetzen</button>
         </div>
       </div>
 
       <div class="step" id="step3">
         <div class="stepHeader">
           <div style="display:flex;align-items:center;gap:10px">
-            <span class="badge">3</span>
-            <div class="stepTitle">Maßstab einstellen</div>
+            <span class="badge">3</span><div class="stepTitle">Maßstab einstellen (funktioniert wieder)</div>
           </div>
           <span class="badge" id="s3">offen</span>
         </div>
-        <div class="stepDesc">Linie über bekannte Länge ziehen und Meter eingeben.</div>
+        <div class="stepDesc">Klicke 2 Punkte mit bekannter Distanz, dann Meter eingeben.</div>
         <div class="row">
-          <button id="btnCal" class="primary" disabled>Kalibrier-Linie ziehen</button>
-          <button id="btnCalReset" disabled>Kalibrierung zurücksetzen</button>
+          <button id="btnCal" class="primary" disabled>Kalibrierung starten</button>
+          <button id="btnCalReset" disabled>Zurücksetzen</button>
         </div>
+
         <div class="split">
           <div>
             <label>Bekannte Länge (m)</label>
@@ -155,34 +136,54 @@
             <input id="fallbackScale" type="number" min="0.1" step="0.1" value="0.5" />
           </div>
         </div>
+
         <div class="split">
           <div>
-            <label>Punkt-Genauigkeit</label>
+            <label>Raster-Größe (für fein/ grob)</label>
+            <select id="gridSize">
+              <option value="40">Groß (40px)</option>
+              <option value="32" selected>Normal (32px)</option>
+              <option value="24">Fein (24px)</option>
+              <option value="16">Sehr fein (16px)</option>
+            </select>
+          </div>
+          <div>
+            <label>Einrasten innerhalb Raster</label>
             <select id="snapMode">
-              <option value="8">Sehr fein (1/8 Raster)</option>
-              <option value="4" selected>Fein (1/4 Raster)</option>
-              <option value="2">Mittel (1/2 Raster)</option>
-              <option value="1">Grob (1 Raster)</option>
+              <option value="8">Sehr fein (1/8)</option>
+              <option value="4" selected>Fein (1/4)</option>
+              <option value="2">Mittel (1/2)</option>
+              <option value="1">Grob (1/1)</option>
               <option value="0">Ganz genau (ohne Raster)</option>
             </select>
           </div>
+        </div>
+
+        <div class="split">
           <div>
             <label>Rohr-Ø (Demo)</label>
             <input id="diam" type="number" min="16" step="1" value="50" />
           </div>
+          <div>
+            <label>Raster anzeigen</label>
+            <select id="gridMode">
+              <option value="grid" selected>anzeigen</option>
+              <option value="none">aus</option>
+            </select>
+          </div>
         </div>
+
         <div class="hint"><span class="ok" id="calOk"></span> <span class="warn" id="calWarn"></span></div>
       </div>
 
       <div class="step" id="step4">
         <div class="stepHeader">
           <div style="display:flex;align-items:center;gap:10px">
-            <span class="badge">4</span>
-            <div class="stepTitle">Wasserquelle setzen</div>
+            <span class="badge">4</span><div class="stepTitle">Wasserquelle setzen</div>
           </div>
           <span class="badge" id="s4">offen</span>
         </div>
-        <div class="stepDesc">Klicke im Plan auf den Wasseranschluss.</div>
+        <div class="stepDesc">Klick im Plan auf den Wasseranschluss.</div>
         <div class="row">
           <button id="btnSource" class="primary" disabled>Wasserquelle setzen</button>
         </div>
@@ -191,12 +192,12 @@
       <div class="step" id="step5">
         <div class="stepHeader">
           <div style="display:flex;align-items:center;gap:10px">
-            <span class="badge">5</span>
-            <div class="stepTitle">Pool platzieren</div>
+            <span class="badge">5</span><div class="stepTitle">Pool platzieren + verschieben</div>
           </div>
           <span class="badge" id="s5">offen</span>
         </div>
-        <div class="stepDesc">Form/Größe wählen, dann im Plan platzieren.</div>
+        <div class="stepDesc">Form/Größe wählen, dann im Plan platzieren. Verschieben: Button drücken, dann Pool ziehen.</div>
+
         <div class="split">
           <div>
             <label>Pool-Form</label>
@@ -206,13 +207,11 @@
             </select>
           </div>
           <div>
-            <label>Raster</label>
-            <select id="gridMode">
-              <option value="grid" selected>anzeigen</option>
-              <option value="none">aus</option>
-            </select>
+            <label>—</label>
+            <button id="btnPoolMove" disabled>Pool verschieben</button>
           </div>
         </div>
+
         <div class="split">
           <div>
             <label id="wLabel">Breite (m)</label>
@@ -223,6 +222,7 @@
             <input id="poolH" type="number" min="0.5" step="0.1" value="2.0" disabled />
           </div>
         </div>
+
         <div class="row">
           <button id="btnPool" class="primary" disabled>Pool/Ziel setzen</button>
         </div>
@@ -232,13 +232,11 @@
       <div class="step" id="step6">
         <div class="stepHeader">
           <div style="display:flex;align-items:center;gap:10px">
-            <span class="badge">6</span>
-            <div class="stepTitle">Sperrzonen (flexibel)</div>
+            <span class="badge">6</span><div class="stepTitle">Sperrzonen (flexibel ✅)</div>
           </div>
           <span class="badge" id="s6">optional</span>
         </div>
         <div class="stepDesc">
-          Zeichne Bereiche, wo keine Leitung durch darf. <br>
           <b>Freihand:</b> Maus gedrückt halten und malen. <b>Polygon:</b> Punkte klicken, <span class="kbd">Enter</span> fertig.
         </div>
         <div class="row">
@@ -246,28 +244,23 @@
           <button id="btnBlockPoly" disabled>Sperrzone Polygon</button>
           <button id="btnBlocksClear" disabled>Alle Sperrzonen löschen</button>
         </div>
-        <div class="hint">Auto-Route berücksichtigt diese Sperrzonen automatisch.</div>
       </div>
 
       <div class="step" id="step7">
         <div class="stepHeader">
           <div style="display:flex;align-items:center;gap:10px">
-            <span class="badge">7</span>
-            <div class="stepTitle">Leitungen planen</div>
+            <span class="badge">7</span><div class="stepTitle">Leitung zeichnen (zusammenhängend)</div>
           </div>
           <span class="badge" id="s7">offen</span>
         </div>
         <div class="stepDesc">
-          Punkte klicken (klick-klick). <span class="kbd">Enter</span> fertig, <span class="kbd">Esc</span> abbrechen. Doppelklick = schnell fertig.
+          1. Klick startet • danach folgt die Linie der Maus • jeder Klick hängt am letzten Punkt • <b>Doppelklick = fertig</b> • <span class="kbd">Esc</span> abbrechen.
         </div>
         <div class="row">
           <button id="btnPipe" class="primary" disabled>Leitung zeichnen</button>
-          <button id="btnAuto" disabled>Auto-Route (um Sperrzonen)</button>
-          <button id="btnPipeFinish" disabled>Fertig</button>
           <button id="btnPipeCancel" disabled>Abbrechen</button>
         </div>
         <div class="toggleRow">
-          <label class="chip"><input type="checkbox" id="showSKUs" checked>Artikelnummern im Plan</label>
           <label class="chip"><input type="checkbox" id="showMeasures" checked>Maße/Längen</label>
         </div>
       </div>
@@ -275,12 +268,11 @@
       <div class="step" id="out">
         <div class="stepHeader">
           <div style="display:flex;align-items:center;gap:10px">
-            <span class="badge">✔</span>
-            <div class="stepTitle">Bestellübersicht</div>
+            <span class="badge">✔</span><div class="stepTitle">Bestellübersicht</div>
           </div>
           <span class="badge ok">bereit</span>
         </div>
-        <div class="stepDesc">Stückliste (Demo-Artikel) + PDF Export.</div>
+        <div class="stepDesc">Stückliste (Demo) + PDF Export.</div>
         <div class="kv" id="bom"></div>
         <div class="small" id="warn"></div>
         <div class="footerRow">
@@ -288,10 +280,6 @@
           <button id="btnPlanClear">Plan löschen</button>
           <button id="btnResetAll">Alles zurücksetzen</button>
         </div>
-      </div>
-
-      <div class="small">
-        Hinweis: Der Auto-Route Algorithmus ist eine Demo (A* auf Raster). Für „perfekt“ kann man später noch echte Rohr-Regeln ergänzen.
       </div>
 
     </div>
@@ -311,12 +299,13 @@
   const canvas = document.getElementById('c');
   const ctx = canvas.getContext('2d');
 
+  // UI
   const hud = document.getElementById('hud');
   const toast = document.getElementById('toast');
 
   const bgFile = document.getElementById('bgFile');
   const btnFit = document.getElementById('btnFit');
-  const btnMove = document.getElementById('btnMove');
+  const btnMoveAll = document.getElementById('btnMoveAll');
   const btnRemove = document.getElementById('btnRemove');
 
   const btnStraight = document.getElementById('btnStraight');
@@ -326,8 +315,10 @@
   const btnCalReset = document.getElementById('btnCalReset');
   const calMeters = document.getElementById('calMeters');
   const fallbackScale = document.getElementById('fallbackScale');
+  const gridSize = document.getElementById('gridSize');
   const snapMode = document.getElementById('snapMode');
   const diamInput = document.getElementById('diam');
+  const gridMode = document.getElementById('gridMode');
   const calOk = document.getElementById('calOk');
   const calWarn = document.getElementById('calWarn');
 
@@ -340,18 +331,14 @@
   const hLabel = document.getElementById('hLabel');
   const poolLive = document.getElementById('poolLive');
   const btnPool = document.getElementById('btnPool');
-  const gridMode = document.getElementById('gridMode');
+  const btnPoolMove = document.getElementById('btnPoolMove');
 
   const btnBlockFree = document.getElementById('btnBlockFree');
   const btnBlockPoly  = document.getElementById('btnBlockPoly');
   const btnBlocksClear = document.getElementById('btnBlocksClear');
 
   const btnPipe = document.getElementById('btnPipe');
-  const btnAuto = document.getElementById('btnAuto');
-  const btnPipeFinish = document.getElementById('btnPipeFinish');
   const btnPipeCancel = document.getElementById('btnPipeCancel');
-
-  const showSKUs = document.getElementById('showSKUs');
   const showMeasures = document.getElementById('showMeasures');
 
   const bomEl = document.getElementById('bom');
@@ -380,15 +367,22 @@
     out: document.getElementById('out'),
   };
 
+  // tools
   const tools = {
-    NONE:'none', MOVE:'move',
-    STRAIGHT:'straight', CAL:'cal',
-    SOURCE:'source', POOL:'pool',
-    BLOCK_FREE:'block_free', BLOCK_POLY:'block_poly',
+    NONE:'none',
+    MOVE_ALL:'move_all',      // drag bg, water, pool
+    MOVE_POOL:'move_pool',    // drag pool only
+    STRAIGHT:'straight',
+    CAL:'cal',
+    SOURCE:'source',
+    POOL:'pool',
+    BLOCK_FREE:'block_free',
+    BLOCK_POLY:'block_poly',
     PIPE:'pipe',
   };
   let tool = tools.NONE;
 
+  // demo catalog
   const catalog = {
     pipe: (diam) => ({ sku:`PVC-ROHR-${diam}`, name:`PVC Rohr Ø${diam} (Meterware)`, unit:'m' }),
     elbow90: (diam) => ({ sku:`PVC-WINKEL90-${diam}`, name:`Winkel 90° Ø${diam}`, unit:'Stk' }),
@@ -398,60 +392,66 @@
     tape: () => ({ sku:`DICHTBAND`, name:`Dichtband (Beispiel)`, unit:'Stk' }),
   };
 
+  // state
   const state = {
     grid: 32,
-    mouseInCanvas: false,
+
     bg: { img:null, x:0, y:0, scale:1, rot:0 },
     bgDrag: null,
-    straighten: { active:false, p1:null, preview:null },
+
+    straighten: { active:false, p1:null, p2:null, preview:null },
+
     cal: { active:false, p1:null, p2:null, pxPerMeter:null },
+
     source: null,
     pool: null,
-    blocks: [],             // polygons: {pts:[{x,y}...]}
-    drawingFree: null,      // {pts:[]}
-    drawingPoly: null,      // {pts:[], preview:null}
-    pipes: [],              // {pts:[]}
-    drawingPipe: null,      // {pts:[], preview?}
-    dragging: null,
-    lastClickTime: 0,
-    busy: false
+
+    blocks: [],
+    drawingFree: null,
+    drawingPoly: null,
+
+    pipes: [],
+    drawingPipe: null,
+
+    draggingObj: null, // {type:'source'|'pool'|'bg', ox, oy}
+    pointerInCanvas: false,
   };
 
-  // ===== helpers UI =====
+  // ===== UI helpers =====
   function setHud(html){ hud.innerHTML = html; }
   function showToast(text){
     toast.textContent = text;
     toast.classList.add('show');
     clearTimeout(showToast._t);
-    showToast._t = setTimeout(() => toast.classList.remove('show'), 1300);
+    showToast._t = setTimeout(() => toast.classList.remove('show'), 1200);
   }
   function enable(el, on){ el.disabled = !on; }
   function badgeSet(el, text, mode){
     el.textContent = text;
     el.classList.remove('ok','warn','bad');
-    if (mode) el.classList.add(mode);
+    if(mode) el.classList.add(mode);
   }
   function activateStep(id){
     Object.values(stepEls).forEach(s => s.classList.remove('activeStep'));
     const el = stepEls[id];
-    if (!el) return;
+    if(!el) return;
     el.classList.add('activeStep');
     el.scrollIntoView({behavior:'smooth', block:'nearest'});
   }
   function markDone(id, done){
     const el = stepEls[id];
-    if (!el) return;
-    if (done) el.classList.add('done'); else el.classList.remove('done');
+    if(!el) return;
+    el.classList.toggle('done', !!done);
   }
 
-  // ===== geometry =====
+  // ===== geometry helpers =====
   function getPos(e){
     const r = canvas.getBoundingClientRect();
     return { x: e.clientX - r.left, y: e.clientY - r.top };
   }
   function snapValue(v){
     const mode = Number(snapMode.value || 4);
-    if (mode === 0) return v;
+    if(mode === 0) return v;
     const step = state.grid / mode;
     return Math.round(v / step) * step;
   }
@@ -461,7 +461,7 @@
   // ===== rotation mapping =====
   function bgCenter(){
     const rect = canvas.getBoundingClientRect();
-    if (!state.bg.img) return {x: rect.width/2, y: rect.height/2};
+    if(!state.bg.img) return {x: rect.width/2, y: rect.height/2};
     const w = state.bg.img.width * state.bg.scale;
     const h = state.bg.img.height * state.bg.scale;
     return { x: state.bg.x + w/2, y: state.bg.y + h/2 };
@@ -479,19 +479,19 @@
 
   // ===== scale conversion =====
   function metersToPx(m){
-    if (state.cal.pxPerMeter) return m * state.cal.pxPerMeter;
+    if(state.cal.pxPerMeter) return m * state.cal.pxPerMeter;
     const metersPerCell = Math.max(0.1, Number(fallbackScale.value) || 0.5);
     return (m / metersPerCell) * state.grid;
   }
   function pxToMeters(px){
-    if (state.cal.pxPerMeter) return px / state.cal.pxPerMeter;
+    if(state.cal.pxPerMeter) return px / state.cal.pxPerMeter;
     const metersPerCell = Math.max(0.1, Number(fallbackScale.value) || 0.5);
     return (px / state.grid) * metersPerCell;
   }
 
   // ===== background fit/resize =====
   function fitBackground(){
-    if (!state.bg.img) return;
+    if(!state.bg.img) return;
     const rect = canvas.getBoundingClientRect();
     const img = state.bg.img;
     const sx = rect.width / img.width;
@@ -511,15 +511,56 @@
   }
   window.addEventListener('resize', resize);
 
+  // ===== pool UI =====
+  function updatePoolLabels(){
+    const shape = poolShape.value;
+    if(shape === 'round'){
+      wLabel.textContent = 'Durchmesser (m)';
+      hLabel.textContent = '—';
+      poolH.disabled = true;
+      poolH.value = poolW.value;
+    } else {
+      wLabel.textContent = 'Breite (m)';
+      hLabel.textContent = 'Länge (m)';
+      poolH.disabled = false;
+    }
+    updatePoolLive();
+  }
+  function updatePoolLive(){
+    const shape = poolShape.value;
+    const w = Number(poolW.value||0);
+    const h = Number(poolH.value||0);
+    if(shape === 'round'){
+      const d = w;
+      const area = Math.PI*(d/2)*(d/2);
+      poolLive.innerHTML = `<span class="ok">Live:</span> Rund – Ø <b>${d.toFixed(2)} m</b> • Fläche <b>${area.toFixed(2)} m²</b>`;
+    } else {
+      const area = w*h;
+      poolLive.innerHTML = `<span class="ok">Live:</span> Rechteck – <b>${w.toFixed(2)}×${h.toFixed(2)} m</b> • Fläche <b>${area.toFixed(2)} m²</b>`;
+    }
+  }
+  function syncPoolIfPlaced(){
+    if(!state.pool) return;
+    const shape = poolShape.value;
+    const wM = Number(poolW.value||0);
+    const hM = (shape==='round') ? wM : Number(poolH.value||0);
+    state.pool.shape = shape;
+    state.pool.w = snapValue(metersToPx(wM));
+    state.pool.h = snapValue(metersToPx(hM));
+  }
+  poolShape.addEventListener('change', ()=>{ updatePoolLabels(); syncPoolIfPlaced(); updateWizard(); });
+  poolW.addEventListener('input', ()=>{ if(poolShape.value==='round') poolH.value=poolW.value; updatePoolLive(); syncPoolIfPlaced(); updateWizard(); });
+  poolH.addEventListener('input', ()=>{ updatePoolLive(); syncPoolIfPlaced(); updateWizard(); });
+
   // ===== polygons =====
   function pointInPoly(pt, poly){
     const vs = poly.pts;
     let inside = false;
-    for (let i=0, j=vs.length-1; i<vs.length; j=i++){
+    for(let i=0, j=vs.length-1; i<vs.length; j=i++){
       const xi=vs[i].x, yi=vs[i].y;
       const xj=vs[j].x, yj=vs[j].y;
       const intersect = ((yi>pt.y)!==(yj>pt.y)) && (pt.x < (xj-xi)*(pt.y-yi)/(yj-yi+1e-12)+xi);
-      if (intersect) inside = !inside;
+      if(intersect) inside = !inside;
     }
     return inside;
   }
@@ -537,46 +578,23 @@
     return false;
   }
 
-  // ===== pool UI =====
-  function updatePoolLabels(){
-    const shape = poolShape.value;
-    if (shape === 'round'){
-      wLabel.textContent = 'Durchmesser (m)';
-      hLabel.textContent = '—';
-      poolH.disabled = true;
-      poolH.value = poolW.value;
+  // ===== hit tests for dragging =====
+  function hitPool(p){
+    if(!state.pool) return false;
+    const pl = state.pool;
+    if(pl.shape==='rect'){
+      return p.x>=pl.x && p.x<=pl.x+pl.w && p.y>=pl.y && p.y<=pl.y+pl.h;
     } else {
-      wLabel.textContent = 'Breite (m)';
-      hLabel.textContent = 'Länge (m)';
-      poolH.disabled = false;
-    }
-    updatePoolLive();
-  }
-  function updatePoolLive(){
-    const shape = poolShape.value;
-    const w = Number(poolW.value||0);
-    const h = Number(poolH.value||0);
-    if (shape === 'round'){
-      const d = w;
-      const area = Math.PI*(d/2)*(d/2);
-      poolLive.innerHTML = `<span class="ok">Live:</span> Rund – Ø <b>${d.toFixed(2)} m</b> • Fläche <b>${area.toFixed(2)} m²</b>`;
-    } else {
-      const area = w*h;
-      poolLive.innerHTML = `<span class="ok">Live:</span> Rechteck – <b>${w.toFixed(2)}×${h.toFixed(2)} m</b> • Fläche <b>${area.toFixed(2)} m²</b>`;
+      const cx = pl.x + pl.w/2;
+      const cy = pl.y + pl.h/2;
+      const r  = pl.w/2;
+      return Math.hypot(p.x-cx, p.y-cy) <= r;
     }
   }
-  function syncPoolIfPlaced(){
-    if (!state.pool) return;
-    const shape = poolShape.value;
-    const wM = Number(poolW.value||0);
-    const hM = (shape==='round') ? wM : Number(poolH.value||0);
-    state.pool.shape = shape;
-    state.pool.w = snapValue(metersToPx(wM));
-    state.pool.h = snapValue(metersToPx(hM));
+  function hitSource(p){
+    if(!state.source) return false;
+    return dist(p, state.source) <= 12;
   }
-  poolShape.addEventListener('change', ()=>{ updatePoolLabels(); syncPoolIfPlaced(); draw(); });
-  poolW.addEventListener('input', ()=>{ if(poolShape.value==='round') poolH.value=poolW.value; updatePoolLive(); syncPoolIfPlaced(); draw(); });
-  poolH.addEventListener('input', ()=>{ updatePoolLive(); syncPoolIfPlaced(); draw(); });
 
   // ===== BOM =====
   function calcBOM(){
@@ -584,24 +602,20 @@
     let totalPx=0, elbows=0, connectors=0, segments=0;
     const warnings=[];
 
-    function addPolyline(pl){
-      const pts=pl.pts;
+    const addPolyline = (pts)=>{
       for(let i=0;i<pts.length-1;i++){
         totalPx += dist(pts[i], pts[i+1]);
         segments++;
-        if(segmentCrossesBlocks(pts[i], pts[i+1])){
-          warnings.push('Leitung schneidet eine Sperrzone. Bitte Route anpassen.');
-        }
+        if(segmentCrossesBlocks(pts[i], pts[i+1])) warnings.push('Leitung schneidet eine Sperrzone. Bitte Route anpassen.');
       }
       if(pts.length>=3) elbows += (pts.length-2);
       if(pts.length>=2){
         connectors += 2;
         connectors += Math.max(0, pts.length-2);
       }
-    }
+    };
 
-    state.pipes.forEach(addPolyline);
-    if(state.drawingPipe && state.drawingPipe.pts?.length>=2) addPolyline(state.drawingPipe);
+    for(const p of state.pipes) addPolyline(p.pts);
 
     const totalM = pxToMeters(totalPx);
 
@@ -621,19 +635,7 @@
       items.push({...catalog.tape(), qty:1});
     }
 
-    let poolInfo=null;
-    if(state.pool){
-      const wM=pxToMeters(state.pool.w);
-      const hM=pxToMeters(state.pool.h);
-      if(state.pool.shape==='round'){
-        const d=wM;
-        poolInfo={shape:'Rund', d, area:Math.PI*(d/2)*(d/2)};
-      } else {
-        poolInfo={shape:'Rechteck', w:wM, h:hM, area:wM*hM};
-      }
-    }
-
-    return {diam,totalM,elbows,connectors,segments,items,warnings:[...new Set(warnings)],poolInfo};
+    return {diam,totalM,elbows,connectors,segments,items,warnings:[...new Set(warnings)]};
   }
 
   function renderBOM(){
@@ -648,7 +650,7 @@
     warnEl.textContent = b.warnings.length ? ('Hinweise: ' + b.warnings.join(' · ')) : '';
   }
 
-  // ===== PDF export =====
+  // ===== PDF =====
   btnPDF.onclick = ()=>{
     const b=calcBOM();
     const {jsPDF}=window.jspdf;
@@ -672,19 +674,7 @@
     line('Projekt: Pool / Bewässerung Planung');
     hr();
 
-    line('1) Projekt-Infos', true);
-    if(b.poolInfo){
-      if(b.poolInfo.shape==='Rund'){
-        line(`Pool: Rund • Ø ${b.poolInfo.d.toFixed(2)} m • Fläche ${b.poolInfo.area.toFixed(2)} m²`);
-      } else {
-        line(`Pool: Rechteck • ${b.poolInfo.w.toFixed(2)}×${b.poolInfo.h.toFixed(2)} m • Fläche ${b.poolInfo.area.toFixed(2)} m²`);
-      }
-    } else line('Pool: (nicht gesetzt)');
-    line(state.source ? 'Wasserquelle: gesetzt' : 'Wasserquelle: (nicht gesetzt)');
-    line(state.cal.pxPerMeter ? 'Maßstab: kalibriert (maßgetreu)' : 'Maßstab: nicht kalibriert (Schätzung)');
-    hr();
-
-    line('2) Stückliste (Beispiel-Artikel)', true);
+    line('Stückliste (Beispiel)', true);
     doc.setFontSize(10);
     doc.setFont('helvetica','bold');
     doc.text('SKU', margin, y);
@@ -704,189 +694,19 @@
     }
 
     hr();
-    line('3) Hinweise', true);
-    if(b.warnings.length){
-      for(const w of b.warnings){
-        const lines = doc.splitTextToSize('• '+w, 190);
-        doc.text(lines, margin, y);
-        y += lines.length*5;
-        if(y>280){ doc.addPage(); y=14; }
-      }
-    } else line('Keine Hinweise.');
+    line('Hinweise', true);
+    const hints = b.warnings.length ? b.warnings : ['Keine Hinweise.'];
+    for(const w of hints){
+      const lines = doc.splitTextToSize('• '+w, 190);
+      doc.text(lines, margin, y);
+      y += lines.length*5;
+      if(y>280){ doc.addPage(); y=14; }
+    }
 
     doc.save('pvc-welt-bestelluebersicht-demo.pdf');
   };
 
-  // ===== A* Auto-Route around blocks =====
-  function worldToGrid(p){
-    const g = state.grid;
-    return { gx: Math.round(p.x / g), gy: Math.round(p.y / g) };
-  }
-  function gridToWorld(gx,gy){
-    const g = state.grid;
-    return { x: gx*g, y: gy*g };
-  }
-  function key(gx,gy){ return gx + ',' + gy; }
-
-  function isBlockedWorld(p){
-    for(const bl of state.blocks){
-      if(pointInPoly(p, bl)) return true;
-    }
-    return false;
-  }
-
-  function buildBlockedSet(bounds){
-    // bounds: {minGX,maxGX,minGY,maxGY}
-    const blocked = new Set();
-    for(let gy=bounds.minGY; gy<=bounds.maxGY; gy++){
-      for(let gx=bounds.minGX; gx<=bounds.maxGX; gx++){
-        const p = gridToWorld(gx,gy);
-        if(isBlockedWorld(p)) blocked.add(key(gx,gy));
-      }
-    }
-    return blocked;
-  }
-
-  function aStar(start, goal, bounds, blocked){
-    const open = new Map();
-    const came = new Map();
-    const gScore = new Map();
-    const fScore = new Map();
-
-    function h(a,b){ return Math.abs(a.gx-b.gx) + Math.abs(a.gy-b.gy); }
-
-    const sKey = key(start.gx,start.gy);
-    open.set(sKey, start);
-    gScore.set(sKey, 0);
-    fScore.set(sKey, h(start, goal));
-
-    const dirs = [
-      {dx:1,dy:0,c:1},{dx:-1,dy:0,c:1},{dx:0,dy:1,c:1},{dx:0,dy:-1,c:1},
-      {dx:1,dy:1,c:1.4},{dx:1,dy:-1,c:1.4},{dx:-1,dy:1,c:1.4},{dx:-1,dy:-1,c:1.4},
-    ];
-
-    let iterations = 0;
-    const maxIter = 120000;
-
-    while(open.size && iterations++ < maxIter){
-      // get node with smallest f
-      let currentKey=null, current=null, bestF=Infinity;
-      for(const [k,n] of open){
-        const f = fScore.get(k) ?? Infinity;
-        if(f < bestF){ bestF=f; currentKey=k; current=n; }
-      }
-      if(!current) break;
-
-      if(current.gx===goal.gx && current.gy===goal.gy){
-        // reconstruct
-        const path = [{gx:current.gx,gy:current.gy}];
-        let ck = currentKey;
-        while(came.has(ck)){
-          ck = came.get(ck);
-          const [x,y] = ck.split(',').map(Number);
-          path.push({gx:x,gy:y});
-        }
-        path.reverse();
-        return path;
-      }
-
-      open.delete(currentKey);
-
-      for(const d of dirs){
-        const nx = current.gx + d.dx;
-        const ny = current.gy + d.dy;
-        if(nx<bounds.minGX || nx>bounds.maxGX || ny<bounds.minGY || ny>bounds.maxGY) continue;
-        const nk = key(nx,ny);
-        if(blocked.has(nk)) continue;
-
-        // avoid cutting corners through blocked (simple)
-        if(Math.abs(d.dx)+Math.abs(d.dy)===2){
-          const k1 = key(current.gx + d.dx, current.gy);
-          const k2 = key(current.gx, current.gy + d.dy);
-          if(blocked.has(k1) || blocked.has(k2)) continue;
-        }
-
-        const tentative = (gScore.get(currentKey) ?? Infinity) + d.c;
-        if(tentative < (gScore.get(nk) ?? Infinity)){
-          came.set(nk, currentKey);
-          gScore.set(nk, tentative);
-          fScore.set(nk, tentative + h({gx:nx,gy:ny}, goal));
-          if(!open.has(nk)) open.set(nk, {gx:nx,gy:ny});
-        }
-      }
-    }
-    return null;
-  }
-
-  function simplifyPath(worldPts){
-    if(worldPts.length<=2) return worldPts;
-    const out=[worldPts[0]];
-    for(let i=1;i<worldPts.length-1;i++){
-      const a=out[out.length-1];
-      const b=worldPts[i];
-      const c=worldPts[i+1];
-      const abx=b.x-a.x, aby=b.y-a.y;
-      const bcx=c.x-b.x, bcy=c.y-b.y;
-      // if direction changes, keep point
-      const cross = abx*bcy - aby*bcx;
-      if(Math.abs(cross) > 1e-6) out.push(b);
-    }
-    out.push(worldPts[worldPts.length-1]);
-    return out;
-  }
-
-  async function autoRouteAvoidBlocks(){
-    if(!state.source || !state.pool) return;
-    if(state.busy) return;
-
-    state.busy = true;
-    setHud('<b>Auto-Route:</b> rechne Route um Sperrzonen herum…');
-    showToast('Auto-Route: rechne…');
-
-    // define start & end
-    const start = snapPoint(state.source);
-    const target = snapPoint({ x: state.pool.x + state.pool.w/2, y: state.pool.y + state.pool.h/2 });
-
-    const sG = worldToGrid(start);
-    const tG = worldToGrid(target);
-
-    // bounds around the project
-    const rect = canvas.getBoundingClientRect();
-    const pad = 6;
-    const bounds = {
-      minGX: Math.floor(0 / state.grid) - pad,
-      maxGX: Math.ceil(rect.width / state.grid) + pad,
-      minGY: Math.floor(0 / state.grid) - pad,
-      maxGY: Math.ceil(rect.height / state.grid) + pad,
-    };
-
-    // build blocked map (fast enough for demo)
-    const blocked = buildBlockedSet(bounds);
-
-    // ensure start/goal not blocked
-    blocked.delete(key(sG.gx,sG.gy));
-    blocked.delete(key(tG.gx,tG.gy));
-
-    // run A*
-    const path = aStar(sG, tG, bounds, blocked);
-
-    if(!path){
-      showToast('Keine Route gefunden (Sperrzonen blockieren alles?)');
-      setHud('<b>Auto-Route:</b> Keine Route gefunden. Zeichne manuell oder ändere Sperrzonen.');
-      state.busy = false;
-      return;
-    }
-
-    const worldPts = path.map(n => snapPoint(gridToWorld(n.gx,n.gy)));
-    const simplified = simplifyPath(worldPts);
-
-    state.pipes.push({ pts: simplified });
-    showToast('Auto-Route fertig ✅');
-    state.busy = false;
-    updateWizard();
-  }
-
-  // ===== wizard status =====
+  // ===== wizard =====
   function updateWizard(){
     const hasBg = !!state.bg.img;
     badgeSet(s1, hasBg?'ok':'offen', hasBg?'ok':null);
@@ -896,15 +716,15 @@
     badgeSet(s2, straightOk?'ok':'optional', straightOk?'ok':null);
     markDone('step2', straightOk);
 
-    if (!hasBg){
+    if(!hasBg){
       badgeSet(s3,'offen',null);
       calOk.textContent=''; calWarn.textContent='';
-    } else if (state.cal.pxPerMeter){
+    } else if(state.cal.pxPerMeter){
       badgeSet(s3,'ok','ok');
       calOk.textContent='✓ Maßstab aktiv – Längen sind maßgetreu.';
       calWarn.textContent='';
       markDone('step3', true);
-    } else if (state.cal.active){
+    } else if(state.cal.active){
       badgeSet(s3,'in Arbeit','warn');
       calOk.textContent=''; calWarn.textContent='Klicke Punkt 1 und Punkt 2 im Plan.';
       markDone('step3', false);
@@ -915,7 +735,7 @@
     }
 
     enable(btnFit, hasBg);
-    enable(btnMove, hasBg);
+    enable(btnMoveAll, hasBg);
     enable(btnRemove, hasBg);
     enable(btnStraight, hasBg);
     enable(btnStraightReset, hasBg);
@@ -932,6 +752,7 @@
     enable(poolW, canPool);
     enable(poolH, canPool && poolShape.value!=='round');
     enable(btnPool, canPool);
+    enable(btnPoolMove, !!state.pool);
     badgeSet(s5, state.pool?'ok':'offen', state.pool?'ok':null);
     markDone('step5', !!state.pool);
 
@@ -944,29 +765,24 @@
 
     const canPipe = !!(state.pool && state.source);
     enable(btnPipe, canPipe);
-    enable(btnAuto, canPipe);
-    enable(btnPipeFinish, !!state.drawingPipe);
     enable(btnPipeCancel, !!state.drawingPipe);
     badgeSet(s7, state.pipes.length>0 ? 'ok' : 'offen', state.pipes.length>0 ? 'ok' : null);
     markDone('step7', state.pipes.length>0);
 
-    if (!hasBg){
+    if(!hasBg){
       setHud('<b>Schritt 1:</b> Bild hochladen.');
       activateStep('step1');
-    } else if (!straightOk){
-      setHud('<b>Schritt 2:</b> Wenn schräg: „Gerade-Linie ziehen“ (wiederholbar).');
-      activateStep('step2');
-    } else if (!state.cal.pxPerMeter){
-      setHud('<b>Schritt 3:</b> Maßstab kalibrieren (Linie ziehen + Meter eingeben).');
+    } else if(!state.cal.pxPerMeter){
+      setHud('<b>Schritt 2–3:</b> Optional geradeziehen, dann Maßstab kalibrieren.');
       activateStep('step3');
-    } else if (!state.source){
+    } else if(!state.source){
       setHud('<b>Schritt 4:</b> Wasserquelle setzen.');
       activateStep('step4');
-    } else if (!state.pool){
+    } else if(!state.pool){
       setHud('<b>Schritt 5:</b> Pool platzieren.');
       activateStep('step5');
-    } else if (state.pipes.length===0){
-      setHud('<b>Schritt 7:</b> Leitung zeichnen oder Auto-Route (um Sperrzonen).');
+    } else if(state.pipes.length===0){
+      setHud('<b>Schritt 7:</b> Leitung zeichnen (Doppelklick = fertig).');
       activateStep('step7');
     } else {
       setHud('<b>Fertig:</b> Stückliste prüfen oder PDF laden.');
@@ -986,7 +802,7 @@
     state.drawingPoly=null;
     state.pipes=[];
     state.drawingPipe=null;
-    state.dragging=null;
+    state.draggingObj=null;
 
     state.cal={active:false,p1:null,p2:null,pxPerMeter:null};
     calMeters.value='';
@@ -995,27 +811,30 @@
   function resetAll(){
     state.bg={img:null,x:0,y:0,scale:1,rot:0};
     state.bgDrag=null;
-    state.straighten={active:false,p1:null,preview:null};
+    state.straighten={active:false,p1:null,p2:null,preview:null};
     resetPlanning();
     tool=tools.NONE;
-    state.busy=false;
     showToast('Alles zurückgesetzt');
     updateWizard();
   }
 
-  // ===== buttons =====
-  btnMove.onclick = ()=>{ tool=tools.MOVE; showToast('Verschieben aktiv'); setHud('<b>Verschieben:</b> Hintergrund oder Objekte ziehen.'); };
+  // ===== tool buttons =====
+  btnMoveAll.onclick = ()=>{
+    tool = (tool===tools.MOVE_ALL) ? tools.NONE : tools.MOVE_ALL;
+    showToast(tool===tools.MOVE_ALL ? 'Verschieben-Modus AN' : 'Verschieben-Modus AUS');
+    setHud(tool===tools.MOVE_ALL ? '<b>Verschieben:</b> Hintergrund/Wasser/Pool ziehen.' : '<b>Hinweis:</b> Wähle einen Schritt links.');
+  };
 
   btnStraight.onclick = ()=>{
     tool=tools.STRAIGHT;
     state.straighten.active=true;
-    state.straighten.p1=null; state.straighten.preview=null;
-    showToast('Geradeziehen gestartet');
-    setHud('<b>Geradeziehen:</b> Punkt 1 klicken, dann Punkt 2 (Kante, die waagerecht sein soll).');
+    state.straighten.p1=null; state.straighten.p2=null; state.straighten.preview=null;
+    showToast('Geradeziehen: jetzt 2 Punkte klicken');
+    setHud('<b>Geradeziehen:</b> Punkt 1 klicken, dann Punkt 2 (Kante).');
+    updateWizard();
   };
   btnStraightReset.onclick = ()=>{
     state.bg.rot=0;
-    state.straighten={active:false,p1:null,preview:null};
     showToast('Geradeziehen zurückgesetzt');
     updateWizard();
   };
@@ -1024,8 +843,9 @@
     tool=tools.CAL;
     state.cal.active=true;
     state.cal.p1=null; state.cal.p2=null; state.cal.pxPerMeter=null;
-    calOk.textContent=''; calWarn.textContent='Klicke Punkt 1 im Plan.';
-    showToast('Kalibrierung gestartet');
+    calWarn.textContent='Klicke Punkt 1 im Plan.';
+    calOk.textContent='';
+    showToast('Kalibrierung: 2 Punkte klicken');
     setHud('<b>Kalibrierung:</b> Punkt 1 klicken, dann Punkt 2 klicken.');
     updateWizard();
   };
@@ -1037,19 +857,34 @@
     updateWizard();
   };
 
-  btnSource.onclick = ()=>{ tool=tools.SOURCE; showToast('Wasserquelle setzen'); setHud('<b>Wasserquelle:</b> Im Plan klicken.'); };
-  btnPool.onclick = ()=>{ tool=tools.POOL; showToast('Pool setzen'); setHud('<b>Pool:</b> Im Plan klicken.'); };
+  btnSource.onclick = ()=>{
+    tool=tools.SOURCE;
+    showToast('Wasserquelle: klicken');
+    setHud('<b>Wasserquelle:</b> Im Plan klicken.');
+  };
+
+  btnPool.onclick = ()=>{
+    tool=tools.POOL;
+    showToast('Pool: klicken');
+    setHud('<b>Pool:</b> Im Plan klicken.');
+  };
+
+  btnPoolMove.onclick = ()=>{
+    tool = tools.MOVE_POOL;
+    showToast('Pool verschieben: Pool ziehen');
+    setHud('<b>Pool verschieben:</b> Pool anklicken und ziehen (Esc beendet).');
+  };
 
   btnBlockFree.onclick = ()=>{
     tool=tools.BLOCK_FREE;
     state.drawingFree=null;
-    showToast('Freihand-Sperrzone: zeichnen');
-    setHud('<b>Sperrzone Freihand:</b> Maus gedrückt halten und zeichnen.');
+    showToast('Sperrzone Freihand: zeichnen');
+    setHud('<b>Sperrzone Freihand:</b> Maus gedrückt halten und malen.');
   };
   btnBlockPoly.onclick = ()=>{
     tool=tools.BLOCK_POLY;
     state.drawingPoly={pts:[], preview:null};
-    showToast('Polygon-Sperrzone: Punkte klicken');
+    showToast('Sperrzone Polygon: Punkte');
     setHud('<b>Sperrzone Polygon:</b> Punkte klicken • Enter fertig • Esc abbrechen.');
   };
   btnBlocksClear.onclick = ()=>{
@@ -1060,30 +895,44 @@
 
   btnPipe.onclick = ()=>{
     tool=tools.PIPE;
-    showToast('Leitung zeichnen');
-    setHud('<b>Leitung:</b> Punkte klicken • Enter fertig • Esc abbrechen • Doppelklick = fertig.');
+    state.drawingPipe = null;
+    showToast('Leitung: 1. Klick startet');
+    setHud('<b>Leitung:</b> Klick startet • Linie folgt Maus • Klick = nächster Punkt • Doppelklick = fertig.');
+    updateWizard();
+  };
+  btnPipeCancel.onclick = ()=>{
+    state.drawingPipe=null;
+    tool=tools.NONE;
+    showToast('Leitung abgebrochen');
+    updateWizard();
   };
 
-  btnAuto.onclick = ()=>autoRouteAvoidBlocks();
-
-  btnPipeFinish.onclick = ()=>finishPipe();
-  btnPipeCancel.onclick = ()=>cancelPipe();
+  btnFit.onclick = ()=>{ fitBackground(); showToast('Bild eingepasst'); draw(); };
+  btnRemove.onclick = ()=>resetAll();
 
   btnPlanClear.onclick = ()=>{
     state.source=null;
     state.pool=null;
     state.blocks=[];
-    state.drawingFree=null;
-    state.drawingPoly=null;
     state.pipes=[];
     state.drawingPipe=null;
     tool=tools.NONE;
-    state.busy=false;
     showToast('Plan gelöscht');
     updateWizard();
   };
-
   btnResetAll.onclick = ()=>resetAll();
+
+  // ===== inputs =====
+  gridSize.addEventListener('change', ()=>{
+    state.grid = Number(gridSize.value||32);
+    showToast('Raster geändert');
+    draw();
+  });
+  snapMode.addEventListener('change', ()=>{ showToast('Einrasten geändert'); draw(); });
+  fallbackScale.addEventListener('input', ()=>{ syncPoolIfPlaced(); updatePoolLive(); draw(); });
+  diamInput.addEventListener('input', draw);
+  gridMode.addEventListener('change', draw);
+  showMeasures.addEventListener('change', draw);
 
   // ===== bg upload =====
   bgFile.addEventListener('change', (e)=>{
@@ -1094,7 +943,7 @@
       state.bg.img=img;
       state.bg.rot=0;
       fitBackground();
-      state.straighten={active:false,p1:null,preview:null};
+      state.straighten={active:false,p1:null,p2:null,preview:null};
       resetPlanning();
       tool=tools.NONE;
       showToast('Bild geladen');
@@ -1103,10 +952,7 @@
     img.src=URL.createObjectURL(file);
   });
 
-  btnFit.onclick = ()=>{ fitBackground(); showToast('Bild eingepasst'); draw(); };
-  btnRemove.onclick = ()=>resetAll();
-
-  // ===== calibration input =====
+  // ===== calibration meter input =====
   calMeters.addEventListener('input', ()=>{
     if(!(state.cal.p1 && state.cal.p2)) return;
     const px=dist(state.cal.p1, state.cal.p2);
@@ -1122,209 +968,7 @@
     }
   });
 
-  // misc
-  snapMode.addEventListener('change', ()=>{ showToast('Punkt-Genauigkeit geändert'); draw(); });
-  fallbackScale.addEventListener('input', ()=>{ syncPoolIfPlaced(); updatePoolLive(); draw(); });
-  diamInput.addEventListener('input', draw);
-  gridMode.addEventListener('change', draw);
-  showSKUs.addEventListener('change', draw);
-  showMeasures.addEventListener('change', draw);
-
-  // ===== pipe helpers =====
-  function finishPipe(){
-    if(!state.drawingPipe) return;
-    if(state.drawingPipe.pts.length>=2){
-      state.pipes.push({pts:[...state.drawingPipe.pts]});
-      showToast('Leitung gespeichert');
-    }
-    state.drawingPipe=null;
-    updateWizard();
-  }
-  function cancelPipe(){
-    state.drawingPipe=null;
-    showToast('Leitung abgebrochen');
-    updateWizard();
-  }
-
-  // ===== canvas events =====
-  canvas.addEventListener('mouseenter', ()=>state.mouseInCanvas=true);
-  canvas.addEventListener('mouseleave', ()=>{
-    state.mouseInCanvas=false;
-    if(state.drawingPipe) delete state.drawingPipe.preview;
-    if(state.drawingPoly) state.drawingPoly.preview=null;
-    state.straighten.preview=null;
-    state.bgDrag=null;
-    state.dragging=null;
-    draw();
-  });
-
-  canvas.addEventListener('mousedown', (e)=>{
-    if(state.busy) return;
-    const ps=getPos(e);
-    const pwRaw=screenToWorld(ps);
-    const pw=snapPoint(pwRaw);
-
-    if(tool===tools.MOVE){
-      // simple move (background only for demo)
-      if(state.bg.img){
-        state.bgDrag={ox:ps.x, oy:ps.y, startX:state.bg.x, startY:state.bg.y};
-      }
-      return;
-    }
-
-    if(tool===tools.STRAIGHT && state.straighten.active){
-      if(!state.straighten.p1){
-        state.straighten.p1=pw;
-        showToast('Geradeziehen: Punkt 1');
-        draw();
-        return;
-      }
-      const dx=pw.x-state.straighten.p1.x;
-      const dy=pw.y-state.straighten.p1.y;
-      const angle=Math.atan2(dy,dx);
-      state.bg.rot = state.bg.rot - angle;
-      showToast('Bild ausgerichtet (wiederholbar)');
-      state.straighten.p1=null; state.straighten.preview=null;
-      updateWizard();
-      return;
-    }
-
-    if(tool===tools.CAL && state.cal.active){
-      if(!state.cal.p1){
-        state.cal.p1=pw;
-        calWarn.textContent='Punkt 1 gesetzt. Jetzt Punkt 2 klicken.';
-        showToast('Kalibrierung: Punkt 1');
-        draw();
-        return;
-      }
-      if(!state.cal.p2){
-        state.cal.p2=pw;
-        calWarn.textContent='Jetzt Meter eingeben.';
-        enable(calMeters,true);
-        calMeters.focus();
-        showToast('Kalibrierung: Punkt 2');
-        updateWizard();
-        return;
-      }
-      return;
-    }
-
-    if(tool===tools.SOURCE){
-      state.source={x:pw.x,y:pw.y};
-      tool=tools.NONE;
-      showToast('Wasserquelle gesetzt');
-      updateWizard();
-      return;
-    }
-
-    if(tool===tools.POOL){
-      const shape=poolShape.value;
-      const wM=Number(poolW.value||0);
-      const hM=(shape==='round')?wM:Number(poolH.value||0);
-      const wPx=snapValue(metersToPx(wM));
-      const hPx=snapValue(metersToPx(hM));
-      state.pool={shape,x:pw.x,y:pw.y,w:wPx,h:hPx};
-      tool=tools.NONE;
-      showToast('Pool gesetzt');
-      updateWizard();
-      return;
-    }
-
-    if(tool===tools.BLOCK_FREE){
-      state.drawingFree={pts:[pw]};
-      draw();
-      return;
-    }
-
-    if(tool===tools.BLOCK_POLY && state.drawingPoly){
-      state.drawingPoly.pts.push(pw);
-      draw();
-      return;
-    }
-
-    if(tool===tools.PIPE){
-      const now=performance.now();
-      const isDouble=(now-state.lastClickTime)<320;
-      state.lastClickTime=now;
-
-      if(!state.drawingPipe){
-        state.drawingPipe={pts:[pw]};
-      } else {
-        const pts=state.drawingPipe.pts;
-        const last=pts[pts.length-1];
-        if(last.x!==pw.x || last.y!==pw.y) pts.push(pw);
-      }
-      enable(btnPipeFinish,true);
-      enable(btnPipeCancel,true);
-
-      if(isDouble && state.drawingPipe.pts.length>=2){
-        finishPipe();
-      } else draw();
-      return;
-    }
-  });
-
-  canvas.addEventListener('mousemove', (e)=>{
-    if(state.busy) return;
-    const ps=getPos(e);
-    const pwRaw=screenToWorld(ps);
-    const pw=snapPoint(pwRaw);
-
-    if(state.bgDrag){
-      state.bg.x = state.bgDrag.startX + (ps.x - state.bgDrag.ox);
-      state.bg.y = state.bgDrag.startY + (ps.y - state.bgDrag.oy);
-      draw();
-      return;
-    }
-
-    if(tool===tools.STRAIGHT && state.straighten.active && state.straighten.p1){
-      state.straighten.preview=pw;
-      draw();
-      return;
-    }
-
-    if(tool===tools.BLOCK_FREE && state.drawingFree){
-      const pts=state.drawingFree.pts;
-      const last=pts[pts.length-1];
-      if(dist(last,pw) >= 6){
-        pts.push(pw);
-        draw();
-      }
-      return;
-    }
-
-    if(tool===tools.BLOCK_POLY && state.drawingPoly){
-      state.drawingPoly.preview=pw;
-      draw();
-      return;
-    }
-
-    if(tool===tools.PIPE && state.drawingPipe && state.mouseInCanvas){
-      state.drawingPipe.preview=pw;
-      draw();
-    }
-  });
-
-  canvas.addEventListener('mouseup', ()=>{
-    state.bgDrag=null;
-
-    if(tool===tools.BLOCK_FREE && state.drawingFree){
-      const pts=state.drawingFree.pts;
-      if(pts.length>=10){
-        const simplified=[pts[0]];
-        for(let i=1;i<pts.length;i++){
-          if(dist(simplified[simplified.length-1], pts[i])>=4) simplified.push(pts[i]);
-        }
-        state.blocks.push({pts:simplified});
-        showToast('Sperrzone gespeichert');
-      } else {
-        showToast('Sperrzone zu klein (nochmal zeichnen)');
-      }
-      state.drawingFree=null;
-      updateWizard();
-    }
-  });
-
+  // ===== Zoom only with Ctrl =====
   canvas.addEventListener('wheel', (e)=>{
     if(!state.bg.img) return;
     if(!e.ctrlKey) return;
@@ -1347,33 +991,16 @@
     draw();
   }, {passive:false});
 
+  // ===== Keyboard =====
   document.addEventListener('keydown', (e)=>{
     if(e.key==='Escape'){
-      if(state.drawingPipe){ cancelPipe(); return; }
-      if(state.cal.active){
-        state.cal.active=false; state.cal.p1=null; state.cal.p2=null;
-        tool=tools.NONE;
-        calWarn.textContent='Kalibrierung abgebrochen.';
-        showToast('Kalibrierung abgebrochen');
-        updateWizard();
-        return;
-      }
-      if(state.straighten.active){
-        state.straighten.active=false; state.straighten.p1=null; state.straighten.preview=null;
-        tool=tools.NONE;
-        showToast('Geradeziehen abgebrochen');
-        updateWizard();
-        return;
-      }
-      if(state.drawingPoly){
-        state.drawingPoly=null;
-        showToast('Polygon abgebrochen');
-        draw();
-      }
+      if(tool===tools.MOVE_POOL){ tool=tools.NONE; showToast('Pool verschieben beendet'); updateWizard(); return; }
+      if(state.drawingPipe){ state.drawingPipe=null; tool=tools.NONE; showToast('Leitung abgebrochen'); updateWizard(); return; }
+      if(state.cal.active){ state.cal.active=false; state.cal.p1=null; state.cal.p2=null; tool=tools.NONE; showToast('Kalibrierung abgebrochen'); updateWizard(); return; }
+      if(state.straighten.active){ state.straighten.active=false; state.straighten.p1=null; state.straighten.p2=null; state.straighten.preview=null; tool=tools.NONE; showToast('Geradeziehen abgebrochen'); updateWizard(); return; }
+      if(state.drawingPoly){ state.drawingPoly=null; showToast('Polygon abgebrochen'); draw(); return; }
     }
-
     if(e.key==='Enter'){
-      if(state.drawingPipe){ finishPipe(); return; }
       if(tool===tools.BLOCK_POLY && state.drawingPoly){
         const pts=state.drawingPoly.pts;
         if(pts.length>=3){
@@ -1386,7 +1013,241 @@
     }
   });
 
-  // ===== drawing =====
+  // ===== drawing helper =====
+  function drawInWorld(fn){
+    const c=bgCenter();
+    ctx.save();
+    ctx.translate(c.x, c.y);
+    ctx.rotate(state.bg.rot);
+    ctx.translate(-c.x, -c.y);
+    fn();
+    ctx.restore();
+  }
+
+  // ===== canvas pointer =====
+  canvas.addEventListener('mouseenter', ()=>state.pointerInCanvas=true);
+  canvas.addEventListener('mouseleave', ()=>{
+    state.pointerInCanvas=false;
+    if(state.drawingPipe) state.drawingPipe.preview=null;
+    if(state.drawingPoly) state.drawingPoly.preview=null;
+    state.straighten.preview=null;
+    state.bgDrag=null;
+    state.draggingObj=null;
+    draw();
+  });
+
+  canvas.addEventListener('mousedown', (e)=>{
+    if(!state.bg.img) return;
+    const ps=getPos(e);
+    const pwRaw=screenToWorld(ps);
+    const pw=snapPoint(pwRaw);
+
+    // MOVE modes (drag bg, source, pool)
+    if(tool===tools.MOVE_ALL || tool===tools.MOVE_POOL){
+      // try drag pool/source first
+      if((tool===tools.MOVE_ALL || tool===tools.MOVE_POOL) && state.pool && hitPool(pwRaw)){
+        state.draggingObj={type:'pool', ox: pwRaw.x - state.pool.x, oy: pwRaw.y - state.pool.y};
+        return;
+      }
+      if(tool===tools.MOVE_ALL && state.source && hitSource(pwRaw)){
+        state.draggingObj={type:'source', ox: pwRaw.x - state.source.x, oy: pwRaw.y - state.source.y};
+        return;
+      }
+      if(tool===tools.MOVE_ALL){
+        state.bgDrag={ox:ps.x, oy:ps.y, startX:state.bg.x, startY:state.bg.y};
+        return;
+      }
+    }
+
+    // STRAIGHTEN (2 clicks)
+    if(tool===tools.STRAIGHT && state.straighten.active){
+      if(!state.straighten.p1){
+        state.straighten.p1=pw;
+        showToast('Geradeziehen: Punkt 1');
+        draw();
+        return;
+      }
+      if(!state.straighten.p2){
+        state.straighten.p2=pw;
+        const dx=state.straighten.p2.x-state.straighten.p1.x;
+        const dy=state.straighten.p2.y-state.straighten.p1.y;
+        const angle=Math.atan2(dy,dx);
+        state.bg.rot = state.bg.rot - angle;
+        showToast('Bild ausgerichtet ✅');
+        // allow repeat: keep active but reset points
+        state.straighten.p1=null; state.straighten.p2=null; state.straighten.preview=null;
+        updateWizard();
+        return;
+      }
+    }
+
+    // CALIBRATION (2 clicks)
+    if(tool===tools.CAL && state.cal.active){
+      if(!state.cal.p1){
+        state.cal.p1=pw;
+        calWarn.textContent='Punkt 1 gesetzt. Jetzt Punkt 2 klicken.';
+        showToast('Kalibrierung: Punkt 1');
+        draw();
+        return;
+      }
+      if(!state.cal.p2){
+        state.cal.p2=pw;
+        calWarn.textContent='Jetzt Meter eingeben.';
+        enable(calMeters,true);
+        calMeters.focus();
+        showToast('Kalibrierung: Punkt 2');
+        updateWizard();
+        return;
+      }
+    }
+
+    // SOURCE
+    if(tool===tools.SOURCE){
+      state.source={x:pw.x,y:pw.y};
+      tool=tools.NONE;
+      showToast('Wasserquelle gesetzt');
+      updateWizard();
+      return;
+    }
+
+    // POOL place
+    if(tool===tools.POOL){
+      const shape=poolShape.value;
+      const wM=Number(poolW.value||0);
+      const hM=(shape==='round')?wM:Number(poolH.value||0);
+      const wPx=snapValue(metersToPx(wM));
+      const hPx=snapValue(metersToPx(hM));
+      state.pool={shape,x:pw.x,y:pw.y,w:wPx,h:hPx};
+      tool=tools.NONE;
+      showToast('Pool gesetzt');
+      updateWizard();
+      return;
+    }
+
+    // BLOCK FREE start
+    if(tool===tools.BLOCK_FREE){
+      state.drawingFree={pts:[pw]};
+      draw();
+      return;
+    }
+
+    // BLOCK POLY add point
+    if(tool===tools.BLOCK_POLY && state.drawingPoly){
+      state.drawingPoly.pts.push(pw);
+      draw();
+      return;
+    }
+
+    // PIPE: start or add point (ALWAYS connected!)
+    if(tool===tools.PIPE){
+      if(!state.drawingPipe){
+        state.drawingPipe={pts:[pw], preview:null};
+        enable(btnPipeCancel,true);
+        showToast('Leitung gestartet');
+      } else {
+        const pts=state.drawingPipe.pts;
+        const last=pts[pts.length-1];
+        if(last.x!==pw.x || last.y!==pw.y) pts.push(pw);
+      }
+      draw();
+      return;
+    }
+  });
+
+  canvas.addEventListener('mousemove', (e)=>{
+    if(!state.bg.img) return;
+    const ps=getPos(e);
+    const pwRaw=screenToWorld(ps);
+    const pw=snapPoint(pwRaw);
+
+    // dragging objects/bg
+    if(state.draggingObj){
+      if(state.draggingObj.type==='pool'){
+        state.pool.x = snapValue(pwRaw.x - state.draggingObj.ox);
+        state.pool.y = snapValue(pwRaw.y - state.draggingObj.oy);
+        draw();
+        return;
+      }
+      if(state.draggingObj.type==='source'){
+        state.source.x = snapValue(pwRaw.x - state.draggingObj.ox);
+        state.source.y = snapValue(pwRaw.y - state.draggingObj.oy);
+        draw();
+        return;
+      }
+    }
+    if(state.bgDrag){
+      state.bg.x = state.bgDrag.startX + (ps.x - state.bgDrag.ox);
+      state.bg.y = state.bgDrag.startY + (ps.y - state.bgDrag.oy);
+      draw();
+      return;
+    }
+
+    // previews
+    if(tool===tools.STRAIGHT && state.straighten.active && state.straighten.p1){
+      state.straighten.preview=pw;
+      draw();
+      return;
+    }
+    if(tool===tools.BLOCK_FREE && state.drawingFree){
+      const pts=state.drawingFree.pts;
+      const last=pts[pts.length-1];
+      if(dist(last,pw) >= 6){
+        pts.push(pw);
+        draw();
+      }
+      return;
+    }
+    if(tool===tools.BLOCK_POLY && state.drawingPoly){
+      state.drawingPoly.preview=pw;
+      draw();
+      return;
+    }
+    if(tool===tools.PIPE && state.drawingPipe){
+      state.drawingPipe.preview=pw; // line follows mouse after first click ✅
+      draw();
+      return;
+    }
+  });
+
+  canvas.addEventListener('mouseup', ()=>{
+    state.bgDrag=null;
+    state.draggingObj=null;
+
+    // finish freehand block
+    if(tool===tools.BLOCK_FREE && state.drawingFree){
+      const pts=state.drawingFree.pts;
+      if(pts.length>=10){
+        const simplified=[pts[0]];
+        for(let i=1;i<pts.length;i++){
+          if(dist(simplified[simplified.length-1], pts[i])>=4) simplified.push(pts[i]);
+        }
+        state.blocks.push({pts:simplified});
+        showToast('Sperrzone gespeichert');
+      } else {
+        showToast('Sperrzone zu klein (nochmal zeichnen)');
+      }
+      state.drawingFree=null;
+      updateWizard();
+    }
+  });
+
+  // Doppelklick = Leitung fertig ✅
+  canvas.addEventListener('dblclick', (e)=>{
+    if(tool!==tools.PIPE) return;
+    if(!state.drawingPipe) return;
+    if(state.drawingPipe.pts.length>=2){
+      state.pipes.push({pts:[...state.drawingPipe.pts]});
+      showToast('Leitung gespeichert ✅');
+    } else {
+      showToast('Leitung: mind. 2 Punkte');
+    }
+    state.drawingPipe=null;
+    tool=tools.NONE;
+    enable(btnPipeCancel,false);
+    updateWizard();
+  });
+
+  // ===== draw =====
   function drawGrid(){
     if(gridMode.value!=='grid') return;
     const rect=canvas.getBoundingClientRect();
@@ -1406,7 +1267,6 @@
     const img=state.bg.img;
     const w=img.width*state.bg.scale;
     const h=img.height*state.bg.scale;
-
     const c=bgCenter();
     ctx.save();
     ctx.globalAlpha=0.92;
@@ -1416,51 +1276,38 @@
     ctx.restore();
   }
 
-  function drawInWorld(fn){
-    const c=bgCenter();
-    ctx.save();
-    ctx.translate(c.x, c.y);
-    ctx.rotate(state.bg.rot);
-    ctx.translate(-c.x, -c.y);
-    fn();
-    ctx.restore();
-  }
-
   function drawBlocks(){
+    if(!state.blocks.length && !state.drawingFree && !(state.drawingPoly && state.drawingPoly.pts.length)) return;
     drawInWorld(()=>{
       ctx.fillStyle='rgba(255,80,80,0.18)';
       ctx.strokeStyle='rgba(255,120,120,0.85)';
       ctx.lineWidth=2;
 
-      function drawPoly(pts, close=true){
+      const drawPoly = (pts, close=true)=>{
         if(pts.length<2) return;
         ctx.beginPath();
         ctx.moveTo(pts[0].x, pts[0].y);
         for(let i=1;i<pts.length;i++) ctx.lineTo(pts[i].x, pts[i].y);
         if(close) ctx.closePath();
-        ctx.fill();
-        ctx.stroke();
-      }
+        ctx.fill(); ctx.stroke();
+      };
 
       for(const b of state.blocks){
         drawPoly(b.pts,true);
         ctx.fillStyle='rgba(255,170,170,0.92)';
         ctx.font='12px system-ui';
-        const p=b.pts[0];
-        ctx.fillText('SPERRZONE', p.x+8, p.y+16);
+        ctx.fillText('SPERRZONE', b.pts[0].x+8, b.pts[0].y+16);
         ctx.fillStyle='rgba(255,80,80,0.18)';
       }
 
-      if(state.drawingFree){
-        drawPoly(state.drawingFree.pts,false);
-      }
+      if(state.drawingFree) drawPoly(state.drawingFree.pts,false);
+
       if(state.drawingPoly){
         const pts=[...state.drawingPoly.pts];
         if(state.drawingPoly.preview) pts.push(state.drawingPoly.preview);
         drawPoly(pts,false);
         ctx.fillStyle='rgba(255,170,170,0.92)';
         for(const p of state.drawingPoly.pts){ ctx.beginPath(); ctx.arc(p.x,p.y,3,0,Math.PI*2); ctx.fill(); }
-        ctx.fillStyle='rgba(255,80,80,0.18)';
       }
     });
   }
@@ -1492,8 +1339,7 @@
         const hM=pxToMeters(p.h);
         let txt='';
         if(p.shape==='round'){
-          const d=wM;
-          const area=Math.PI*(d/2)*(d/2);
+          const d=wM; const area=Math.PI*(d/2)*(d/2);
           txt=`Ø ${d.toFixed(2)} m • ${area.toFixed(2)} m²`;
         } else {
           const area=wM*hM;
@@ -1524,26 +1370,40 @@
       ctx.lineCap='round';
       ctx.lineJoin='round';
 
-      function drawLine(pl, preview=false){
+      const drawLine = (pl)=>{
         const pts=pl.pts;
         if(!pts.length) return;
         ctx.beginPath();
         ctx.moveTo(pts[0].x, pts[0].y);
         for(let i=1;i<pts.length;i++) ctx.lineTo(pts[i].x, pts[i].y);
-        if(preview && pl.preview) ctx.lineTo(pl.preview.x, pl.preview.y);
         ctx.stroke();
 
         ctx.fillStyle='#c9f7cf';
         for(const p of pts){ ctx.beginPath(); ctx.arc(p.x,p.y,4,0,Math.PI*2); ctx.fill(); }
+      };
+
+      for(const p of state.pipes) drawLine(p);
+
+      // preview line (mouse-follow)
+      if(state.drawingPipe){
+        const pts = state.drawingPipe.pts;
+        if(pts.length){
+          ctx.beginPath();
+          ctx.moveTo(pts[0].x, pts[0].y);
+          for(let i=1;i<pts.length;i++) ctx.lineTo(pts[i].x, pts[i].y);
+          if(state.drawingPipe.preview) ctx.lineTo(state.drawingPipe.preview.x, state.drawingPipe.preview.y);
+          ctx.stroke();
+
+          ctx.fillStyle='#c9f7cf';
+          for(const p of pts){ ctx.beginPath(); ctx.arc(p.x,p.y,4,0,Math.PI*2); ctx.fill(); }
+        }
       }
 
-      for(const p of state.pipes) drawLine(p,false);
-      if(state.drawingPipe) drawLine(state.drawingPipe,true);
-
+      // segment labels
       if(showMeasures.checked){
         ctx.fillStyle='rgba(255,255,255,.9)';
         ctx.font='12px system-ui';
-        const labelSegs = (pts)=>{
+        const labelSegs=(pts)=>{
           for(let i=0;i<pts.length-1;i++){
             const a=pts[i], b=pts[i+1];
             const mid={x:(a.x+b.x)/2, y:(a.y+b.y)/2};
@@ -1555,7 +1415,7 @@
     });
   }
 
-  function drawStraightPreview(){
+  function drawStraightenPreview(){
     if(!(tool===tools.STRAIGHT && state.straighten.active && state.straighten.p1 && state.straighten.preview)) return;
     drawInWorld(()=>{
       ctx.strokeStyle='rgba(255,255,255,.85)';
@@ -1589,55 +1449,6 @@
     });
   }
 
-  function drawSKUCallouts(){
-    if(!showSKUs.checked) return;
-    const b=calcBOM();
-    const diam=b.diam;
-
-    const skuElbow = `Winkel 90°: ${catalog.elbow90(diam).sku}`;
-    const skuConn  = `Muffe: ${catalog.connector(diam).sku}`;
-
-    drawInWorld(()=>{
-      ctx.font='12px system-ui';
-
-      function callout(at, text){
-        const padX=8;
-        const w = ctx.measureText(text).width + padX*2;
-        const h = 22;
-        const bx = at.x + 14;
-        const by = at.y - 12;
-
-        ctx.beginPath();
-        ctx.moveTo(at.x+4, at.y-2);
-        ctx.lineTo(bx, by+8);
-        ctx.strokeStyle='rgba(255,255,255,.30)';
-        ctx.lineWidth=1;
-        ctx.stroke();
-
-        ctx.fillStyle='rgba(0,0,0,.55)';
-        ctx.strokeStyle='rgba(255,255,255,.18)';
-        ctx.lineWidth=1;
-        ctx.beginPath();
-        ctx.roundRect(bx, by, w, h, 8);
-        ctx.fill(); ctx.stroke();
-
-        ctx.fillStyle='rgba(255,255,255,.92)';
-        ctx.fillText(text, bx+padX, by+15);
-      }
-
-      for(const pl of state.pipes){
-        const pts=pl.pts;
-        if(pts.length>=2){
-          callout(pts[0], skuConn);
-          callout(pts[pts.length-1], skuConn);
-        }
-        for(let i=1;i<pts.length-1;i++){
-          callout(pts[i], skuElbow);
-        }
-      }
-    });
-  }
-
   function draw(){
     const rect=canvas.getBoundingClientRect();
     ctx.clearRect(0,0,rect.width,rect.height);
@@ -1649,388 +1460,21 @@
     drawSource();
     drawPipes();
     drawCalLine();
-    drawStraightPreview();
-    drawSKUCallouts();
+    drawStraightenPreview();
 
     renderBOM();
   }
 
-  // ===== tool wiring =====
-  btnFit.onclick = ()=>{ fitBackground(); showToast('Bild eingepasst'); draw(); };
-  btnMove.onclick = ()=>{ tool=tools.MOVE; showToast('Verschieben aktiv'); setHud('<b>Verschieben:</b> Hintergrund ziehen.'); };
-  btnRemove.onclick = ()=>resetAll();
-
-  btnStraight.onclick = ()=>{
-    tool=tools.STRAIGHT; state.straighten.active=true; state.straighten.p1=null; state.straighten.preview=null;
-    showToast('Geradeziehen: starte'); setHud('<b>Geradeziehen:</b> Punkt 1 klicken, dann Punkt 2.');
-  };
-  btnStraightReset.onclick = ()=>{
-    state.bg.rot=0; state.straighten={active:false,p1:null,preview:null};
-    showToast('Geradeziehen zurückgesetzt'); updateWizard();
-  };
-
-  btnCal.onclick = ()=>{
-    tool=tools.CAL; state.cal.active=true; state.cal.p1=null; state.cal.p2=null; state.cal.pxPerMeter=null;
-    calOk.textContent=''; calWarn.textContent='Klicke Punkt 1 im Plan.';
-    showToast('Kalibrierung gestartet'); setHud('<b>Kalibrierung:</b> Punkt 1 klicken, dann Punkt 2.');
-    updateWizard();
-  };
-  btnCalReset.onclick = ()=>{
-    state.cal={active:false,p1:null,p2:null,pxPerMeter:null};
-    calMeters.value=''; calOk.textContent=''; calWarn.textContent='';
-    showToast('Kalibrierung zurückgesetzt'); updateWizard();
-  };
-
-  btnSource.onclick = ()=>{ tool=tools.SOURCE; showToast('Wasserquelle setzen'); setHud('<b>Wasserquelle:</b> Im Plan klicken.'); };
-  btnPool.onclick = ()=>{ tool=tools.POOL; showToast('Pool setzen'); setHud('<b>Pool:</b> Im Plan klicken.'); };
-
-  btnBlockFree.onclick = ()=>{ tool=tools.BLOCK_FREE; state.drawingFree=null; showToast('Freihand Sperrzone'); setHud('<b>Sperrzone Freihand:</b> drücken & zeichnen.'); };
-  btnBlockPoly.onclick  = ()=>{ tool=tools.BLOCK_POLY; state.drawingPoly={pts:[], preview:null}; showToast('Polygon Sperrzone'); setHud('<b>Sperrzone Polygon:</b> Punkte klicken • Enter fertig • Esc abbrechen.'); };
-  btnBlocksClear.onclick= ()=>{ state.blocks=[]; showToast('Sperrzonen gelöscht'); updateWizard(); };
-
-  btnPipe.onclick = ()=>{ tool=tools.PIPE; showToast('Leitung zeichnen'); setHud('<b>Leitung:</b> Punkte klicken • Enter fertig • Esc abbrechen • Doppelklick = fertig.'); };
-  btnAuto.onclick = ()=>autoRouteAvoidBlocks();
-  btnPipeFinish.onclick = ()=>finishPipe();
-  btnPipeCancel.onclick = ()=>cancelPipe();
-
-  btnPlanClear.onclick = ()=>{
-    state.source=null; state.pool=null; state.blocks=[]; state.pipes=[]; state.drawingPipe=null; state.drawingFree=null; state.drawingPoly=null;
-    tool=tools.NONE; state.busy=false; showToast('Plan gelöscht'); updateWizard();
-  };
-  btnResetAll.onclick = ()=>resetAll();
-
-  // BG load
-  bgFile.addEventListener('change', (e)=>{
-    const file=e.target.files?.[0];
-    if(!file) return;
-    const img=new Image();
-    img.onload=()=>{
-      state.bg.img=img; state.bg.rot=0; fitBackground();
-      state.straighten={active:false,p1:null,preview:null};
-      resetPlanning(); tool=tools.NONE; state.busy=false;
-      showToast('Bild geladen'); updateWizard();
-    };
-    img.src=URL.createObjectURL(file);
-  });
-
-  // inputs
-  calMeters.addEventListener('input', ()=>{
-    if(!(state.cal.p1 && state.cal.p2)) return;
-    const px=dist(state.cal.p1, state.cal.p2);
-    const m=Number(calMeters.value||0);
-    if(m>0){
-      state.cal.pxPerMeter = px / m;
-      state.cal.active=false; tool=tools.NONE;
-      calOk.textContent='✓ Maßstab aktiv – Längen sind maßgetreu.'; calWarn.textContent='';
-      showToast('Maßstab gespeichert'); updateWizard();
-    }
-  });
-
-  // ===== canvas interaction =====
-  canvas.addEventListener('mouseenter', ()=>state.mouseInCanvas=true);
-  canvas.addEventListener('mouseleave', ()=>{
-    state.mouseInCanvas=false;
-    if(state.drawingPipe) delete state.drawingPipe.preview;
-    if(state.drawingPoly) state.drawingPoly.preview=null;
-    state.straighten.preview=null;
-    state.bgDrag=null;
-    draw();
-  });
-
-  canvas.addEventListener('mousedown', (e)=>{
-    if(state.busy) return;
-    const ps=getPos(e);
-    const pwRaw=screenToWorld(ps);
-    const pw=snapPoint(pwRaw);
-
-    if(tool===tools.MOVE && state.bg.img){
-      state.bgDrag={ox:ps.x, oy:ps.y, startX:state.bg.x, startY:state.bg.y};
-      return;
-    }
-
-    if(tool===tools.STRAIGHT && state.straighten.active){
-      if(!state.straighten.p1){
-        state.straighten.p1=pw;
-        showToast('Geradeziehen: Punkt 1');
-        draw();
-        return;
-      }
-      const dx=pw.x-state.straighten.p1.x;
-      const dy=pw.y-state.straighten.p1.y;
-      const angle=Math.atan2(dy,dx);
-      state.bg.rot = state.bg.rot - angle;
-      showToast('Bild ausgerichtet ✅ (wiederholbar)');
-      state.straighten.p1=null; state.straighten.preview=null;
-      updateWizard();
-      return;
-    }
-
-    if(tool===tools.CAL && state.cal.active){
-      if(!state.cal.p1){
-        state.cal.p1=pw;
-        calWarn.textContent='Punkt 1 gesetzt. Jetzt Punkt 2 klicken.';
-        showToast('Kalibrierung: Punkt 1');
-        draw();
-        return;
-      }
-      if(!state.cal.p2){
-        state.cal.p2=pw;
-        calWarn.textContent='Jetzt Meter eingeben.';
-        enable(calMeters,true);
-        calMeters.focus();
-        showToast('Kalibrierung: Punkt 2');
-        updateWizard();
-        return;
-      }
-      return;
-    }
-
-    if(tool===tools.SOURCE){
-      state.source={x:pw.x,y:pw.y};
-      tool=tools.NONE;
-      showToast('Wasserquelle gesetzt');
-      updateWizard();
-      return;
-    }
-
-    if(tool===tools.POOL){
-      const shape=poolShape.value;
-      const wM=Number(poolW.value||0);
-      const hM=(shape==='round')?wM:Number(poolH.value||0);
-      const wPx=snapValue(metersToPx(wM));
-      const hPx=snapValue(metersToPx(hM));
-      state.pool={shape,x:pw.x,y:pw.y,w:wPx,h:hPx};
-      tool=tools.NONE;
-      showToast('Pool gesetzt');
-      updateWizard();
-      return;
-    }
-
-    if(tool===tools.BLOCK_FREE){
-      state.drawingFree={pts:[pw]};
-      draw();
-      return;
-    }
-
-    if(tool===tools.BLOCK_POLY && state.drawingPoly){
-      state.drawingPoly.pts.push(pw);
-      draw();
-      return;
-    }
-
-    if(tool===tools.PIPE){
-      const now=performance.now();
-      const isDouble=(now-state.lastClickTime)<320;
-      state.lastClickTime=now;
-
-      if(!state.drawingPipe){
-        state.drawingPipe={pts:[pw]};
-      } else {
-        const pts=state.drawingPipe.pts;
-        const last=pts[pts.length-1];
-        if(last.x!==pw.x || last.y!==pw.y) pts.push(pw);
-      }
-      enable(btnPipeFinish,true);
-      enable(btnPipeCancel,true);
-
-      if(isDouble && state.drawingPipe.pts.length>=2){
-        finishPipe();
-      } else draw();
-      return;
-    }
-  });
-
-  canvas.addEventListener('mousemove', (e)=>{
-    if(state.busy) return;
-    const ps=getPos(e);
-    const pw=snapPoint(screenToWorld(ps));
-
-    if(state.bgDrag){
-      state.bg.x = state.bgDrag.startX + (ps.x - state.bgDrag.ox);
-      state.bg.y = state.bgDrag.startY + (ps.y - state.bgDrag.oy);
-      draw();
-      return;
-    }
-
-    if(tool===tools.STRAIGHT && state.straighten.active && state.straighten.p1){
-      state.straighten.preview=pw;
-      draw();
-      return;
-    }
-
-    if(tool===tools.BLOCK_FREE && state.drawingFree){
-      const pts=state.drawingFree.pts;
-      const last=pts[pts.length-1];
-      if(dist(last,pw) >= 6){
-        pts.push(pw);
-        draw();
-      }
-      return;
-    }
-
-    if(tool===tools.BLOCK_POLY && state.drawingPoly){
-      state.drawingPoly.preview=pw;
-      draw();
-      return;
-    }
-
-    if(tool===tools.PIPE && state.drawingPipe && state.mouseInCanvas){
-      state.drawingPipe.preview=pw;
-      draw();
-    }
-  });
-
-  canvas.addEventListener('mouseup', ()=>{
-    state.bgDrag=null;
-
-    if(tool===tools.BLOCK_FREE && state.drawingFree){
-      const pts=state.drawingFree.pts;
-      if(pts.length>=10){
-        const simplified=[pts[0]];
-        for(let i=1;i<pts.length;i++){
-          if(dist(simplified[simplified.length-1], pts[i])>=4) simplified.push(pts[i]);
-        }
-        state.blocks.push({pts:simplified});
-        showToast('Sperrzone gespeichert');
-      } else {
-        showToast('Sperrzone zu klein (nochmal zeichnen)');
-      }
-      state.drawingFree=null;
-      updateWizard();
-    }
-  });
-
-  canvas.addEventListener('wheel', (e)=>{
-    if(!state.bg.img) return;
-    if(!e.ctrlKey) return;
-    e.preventDefault();
-
-    const rect=canvas.getBoundingClientRect();
-    const mx=e.clientX-rect.left, my=e.clientY-rect.top;
-    const anchorWorld=screenToWorld({x:mx,y:my});
-
-    const oldScale=state.bg.scale;
-    const factor=(e.deltaY<0)?1.08:0.92;
-    const newScale=Math.max(0.1, Math.min(10, oldScale*factor));
-
-    const imgX=(anchorWorld.x - state.bg.x)/oldScale;
-    const imgY=(anchorWorld.y - state.bg.y)/oldScale;
-
-    state.bg.scale=newScale;
-    state.bg.x=anchorWorld.x - imgX*newScale;
-    state.bg.y=anchorWorld.y - imgY*newScale;
-    draw();
-  }, {passive:false});
-
-  document.addEventListener('keydown', (e)=>{
-    if(e.key==='Escape'){
-      if(state.drawingPipe){ cancelPipe(); return; }
-      if(state.cal.active){
-        state.cal.active=false; state.cal.p1=null; state.cal.p2=null;
-        tool=tools.NONE; calWarn.textContent='Kalibrierung abgebrochen.';
-        showToast('Kalibrierung abgebrochen'); updateWizard(); return;
-      }
-      if(state.straighten.active){
-        state.straighten.active=false; state.straighten.p1=null; state.straighten.preview=null;
-        tool=tools.NONE; showToast('Geradeziehen abgebrochen'); updateWizard(); return;
-      }
-      if(state.drawingPoly){
-        state.drawingPoly=null;
-        showToast('Polygon abgebrochen');
-        draw();
-      }
-    }
-
-    if(e.key==='Enter'){
-      if(state.drawingPipe){ finishPipe(); return; }
-      if(tool===tools.BLOCK_POLY && state.drawingPoly){
-        const pts=state.drawingPoly.pts;
-        if(pts.length>=3){
-          state.blocks.push({pts:[...pts]});
-          showToast('Sperrzone gespeichert');
-        } else showToast('Polygon: mind. 3 Punkte');
-        state.drawingPoly={pts:[], preview:null};
-        updateWizard();
-      }
-    }
-  });
-
   // ===== init =====
-  function resetPlanning(){
-    state.source=null;
-    state.pool=null;
-    state.blocks=[];
-    state.drawingFree=null;
-    state.drawingPoly=null;
-    state.pipes=[];
-    state.drawingPipe=null;
-    state.bgDrag=null;
-    state.cal={active:false,p1:null,p2:null,pxPerMeter:null};
-    calMeters.value='';
-    calOk.textContent=''; calWarn.textContent='';
-  }
-
-  function initUI(){
-    enable(btnFit,false); enable(btnMove,false); enable(btnRemove,false);
-    enable(btnStraight,false); enable(btnStraightReset,false);
-    enable(btnCal,false); enable(btnCalReset,false); enable(calMeters,false);
-    enable(btnSource,false);
-    enable(poolShape,false); enable(poolW,false); enable(poolH,false); enable(btnPool,false);
-    enable(btnBlockFree,false); enable(btnBlockPoly,false); enable(btnBlocksClear,false);
-    enable(btnPipe,false); enable(btnAuto,false); enable(btnPipeFinish,false); enable(btnPipeCancel,false);
-
-    badgeSet(s1,'offen',null);
-    badgeSet(s2,'optional',null);
-    badgeSet(s3,'offen','warn');
-    badgeSet(s4,'offen',null);
-    badgeSet(s5,'offen',null);
-    badgeSet(s6,'optional',null);
-    badgeSet(s7,'offen',null);
-
+  function init(){
     updatePoolLabels();
     updatePoolLive();
-    setHud('<b>Schritt 1:</b> Bild hochladen.');
+    resize();
+    updateWizard();
   }
 
-  function enableWithBg(){
-    const hasBg=!!state.bg.img;
-    enable(btnFit, hasBg);
-    enable(btnMove, hasBg);
-    enable(btnRemove, hasBg);
-    enable(btnStraight, hasBg);
-    enable(btnStraightReset, hasBg);
-    enable(btnCal, hasBg);
-    enable(btnCalReset, hasBg);
-    enable(btnSource, hasBg);
-  }
-
-  const _uw = updateWizard;
-  updateWizard = function(){
-    enableWithBg();
-    // unlock pool after source
-    const canPool = !!state.source;
-    enable(poolShape, canPool);
-    enable(poolW, canPool);
-    enable(poolH, canPool && poolShape.value!=='round');
-    enable(btnPool, canPool);
-
-    // blocks after pool
-    const canBlocks = !!state.pool;
-    enable(btnBlockFree, canBlocks);
-    enable(btnBlockPoly, canBlocks);
-    enable(btnBlocksClear, canBlocks && state.blocks.length>0);
-
-    // pipes after pool+source
-    const canPipe = !!(state.pool && state.source);
-    enable(btnPipe, canPipe);
-    enable(btnAuto, canPipe);
-
-    _uw();
-  };
-
-  resize();
-  initUI();
-  updateWizard();
+  // ===== start =====
+  init();
 })();
 </script>
 </body>
